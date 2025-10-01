@@ -1,0 +1,107 @@
+/* Navbar container */
+.navbar {
+  position: fixed;          /* keeps it fixed at top */
+  top: 0;                   /* aligns to very top */
+  left: 0;                  /* aligns to left */
+  width: 100%;              /* full width */
+  display: flex;
+  justify-content: flex;
+  align-items: center;
+  background-color: #7ad26669;
+  border-bottom: 1px solid #ddd;
+  font-family: Arial, sans-serif;
+  padding: 12px;
+  z-index: 1000;
+
+}
+
+/* Logo */
+.logo {
+  font-weight: bold;
+  font-size: 20px;
+  color: #333;
+  flex:1;
+}
+
+/* General nav links */
+./* Navbar container */
+.navbar {
+  display: flex;
+  justify-content: space-between; /* space between groups */
+  align-items: center;
+  padding: 12px 24px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  font-family: Arial, sans-serif;
+}
+
+/* Logo */
+.logo {
+  font-weight: bold;
+  font-size: 20px;
+  color: #333;
+}
+
+/* Nav links and auth links */
+.nav-links,
+.auth-links {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  margin: 0;   /* reset margins */
+  padding: 0;
+  flex: 100; /* allows spacing */
+  justify-content: center; /* centers nav items */
+}
+
+/* Hover effect */
+.nav-links li {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.nav-links li:hover {
+  color: #007bff;
+}
+
+/* Auth buttons */
+.signup,
+.login {
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Signup button */
+.signup {
+  border: 1px solid #007bff;
+  color: #007bff;
+}
+
+.signup:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Login button */
+.login {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+
+.login:hover {
+  background-color: #0056b3;
+}
+
+/* Login button */
+.login {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+
+.login:hover {
+  background-color: #0056b3;
+}
