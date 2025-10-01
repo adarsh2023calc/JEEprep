@@ -1,13 +1,108 @@
 .hero {
-  height: 90vh;
   display: flex;
   justify-content: center;
+  left:0px;
   align-items: center;
+  /* Navbar container */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between; /* logo left, links right */
+  align-items: center;
+  padding: 12px 24px;
+  background-color: #7ad26669;
+  border-bottom: 1px solid #ddd;
+  font-family: Arial, sans-serif;
+  z-index: 1000; /* keeps it above other elements */
+}
+
+/* Logo */
+.logo {
+  font-weight: bold;
+  font-size: 20px;
+  color: #333;
+  position: relative; /* not fixed anymore */
+}
+
+/* Nav links and auth links */
+.nav-links,
+.auth-links {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+/* Hover effect for nav items */
+.nav-links li {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.nav-links li:hover {
+  color: #007bff;
+}
+
+/* Auth buttons */
+.signup,
+.login {
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap; /* prevents breaking into new lines */
+}
+
+/* Signup button */
+.signup {
+  border: 1px solid #007bff;
+  color: #007bff;
+}
+.signup:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Login button */
+.login {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+.login:hover {
+  background-color: #0056b3;
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 700px) {
+  .navbar {
+    flex-direction: column; /* stack logo and links */
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .logo {
+    margin-bottom: 10px;
+  }
+
+  .auth-links {
+    width: 100%;
+    justify-content: flex-start; /* keep sign in visible */
+    gap: 10px;
+  }
+}
+
   text-align: center;
   background: linear-gradient(135deg, #4facfe, #00f2fe);
   color: white;
   font-family: Arial, sans-serif;
-  padding: 0 20px;
+  padding:30px;
+  width:100%;
+
 }
 
 .hero-content h1 {

@@ -1,9 +1,6 @@
 /* Navbar container */
-.navbar {
-  position: fixed;          /* keeps it fixed at top */
-  top: 0;                   /* aligns to very top */
-  left: 0;                  /* aligns to left */
-  width: 100%;              /* full width */
+.navbar {         /* keeps it fixed at top */       /* aligns to left */
+  width: 200%;              /* full width */
   display: flex;
   justify-content: flex;
   align-items: center;
@@ -11,8 +8,6 @@
   border-bottom: 1px solid #ddd;
   font-family: Arial, sans-serif;
   padding: 12px;
-  z-index: 1000;
-
 }
 
 /* Logo */
@@ -20,9 +15,18 @@
   font-weight: bold;
   font-size: 20px;
   color: #333;
-  flex:1;
+  top:10px;
+  width:auto;
+  
 }
 
+
+/* When screen width is less than 500px */
+@media (max-width: 700px) {
+  .logo {
+       display:none;
+  }
+}
 /* General nav links */
 ./* Navbar container */
 .navbar {
