@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./LoginModal.css";
 
-const LoginModal = ({ isOpen, onClose }) => {
+const Signup = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
 
   if (!isOpen) return null; // hide when not open
@@ -21,8 +21,8 @@ const LoginModal = ({ isOpen, onClose }) => {
       <div className="modal-content">
         <button className="close-btn" onClick={onClose}>✖</button>
         
-        <h2>Welcome Back 👋</h2>
-        <p>Please log in to continue</p>
+        <h2>Hello Candidate</h2>
+        <p>Please Register in to continue</p>
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
@@ -49,15 +49,11 @@ const LoginModal = ({ isOpen, onClose }) => {
             />
           </div>
 
-          <button type="submit" className="login-btn">Log In</button>
+          <button type="submit" className="login-btn">Create Account</button>
         </form>
-
-        <p className="signup-text">
-          Don’t have an account? <a href="/login">Sign Up</a>
-        </p>
       </div>
     </div>
   );
 };
 
-export default LoginModal;
+export default Signup;

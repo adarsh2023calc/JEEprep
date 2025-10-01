@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import "./Navbar.css"; // import CSS file
 
+import Signup from "./Signup";
 import LoginModal from "./Login";
 
 export default function Navbar() {
    const [isLoginOpen, setIsLoginOpen] = useState(false);
+   const [isSignupOpen,setIsSignupOpen] = useState(false);
   return (
     <nav className="navbar">
       {/* Logo */}
@@ -18,13 +20,21 @@ export default function Navbar() {
       </ul>
 
       {/* Auth Links */}
+      
       <ul className="auth-links">
-        <li className="signup">Sign Up</li>
-        <li className="login" onClick={() => setIsLoginOpen(true)}>Log In</li>
+        <li className="signup" onClick={() => setIsSignupOpen(true)}>
+          Sign Up
+        </li>
+        <li className="login" onClick={() => setIsLoginOpen(true)}>
+          Log In
+        </li>
       </ul>
 
       {/* Popup login modal */}
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-       </nav>
+
+      {/* Popup signup modal */}
+      <Signup isOpen={isSignupOpen} onClose={() => setIsSignupOpen(false)} />
+    </nav>
   );
 }
