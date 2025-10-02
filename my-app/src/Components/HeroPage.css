@@ -1,11 +1,11 @@
 .hero {
   display: flex;
   justify-content: center;
-  left:0px;
   align-items: center;
+  margin-top: 1px;
+}
   /* Navbar container */
 .navbar {
-  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -95,7 +95,8 @@
     gap: 10px;
   }
 }
-
+  .hero-content{
+  margin-top: auto;
   text-align: center;
   background: linear-gradient(135deg, #4facfe, #00f2fe);
   color: white;

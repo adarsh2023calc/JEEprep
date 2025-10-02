@@ -1,6 +1,6 @@
 /* Navbar container */
 .navbar {         /* keeps it fixed at top */       /* aligns to left */
-  width: 200%;              /* full width */
+  width: 100%;              /* full width */
   display: flex;
   justify-content: flex;
   align-items: center;
@@ -15,8 +15,7 @@
   font-weight: bold;
   font-size: 20px;
   color: #333;
-  top:10px;
-  width:auto;
+  width:50%;
   
 }
 
