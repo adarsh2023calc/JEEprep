@@ -17,10 +17,11 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from apti.views import main_backend_page
+from apti.views import main_backend_page,aptitude_quiz
 
 urlpatterns = [
-    path("", main_backend_page)
+    path("", main_backend_page),
+    path("aptitude_quiz.html", aptitude_quiz),
 ]
 
 

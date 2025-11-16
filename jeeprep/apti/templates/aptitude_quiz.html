@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aptitude Quiz Selector</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-10">
+  <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow space-y-6">
+    <h1 class="text-3xl font-bold text-center mb-4">Aptitude Quiz Settings</h1>
+
+    <!-- Number of questions -->
+    <div>
+      <label class="block font-semibold mb-1">Number of Questions</label>
+      <input type="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter number of questions" />
+    </div>
+
+    <!-- Time allotted -->
+    <div>
+      <label class="block font-semibold mb-1">Time Allotted (minutes)</label>
+      <input type="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter time in minutes" />
+    </div>
+
+    <!-- Difficulty level -->
+    <div>
+      <label class="block font-semibold mb-1">Difficulty Level</label>
+      <select class="w-full border p-2 rounded-lg">
+        <option>Easy</option>
+        <option>Medium</option>
+        <option>Hard</option>
+      </select>
+    </div>
+
+    <!-- Negative marking -->
+    <div class="flex items-center space-x-3">
+      <label class="font-semibold">Negative Marking</label>
+      <input type="checkbox" class="w-5 h-5" />
+    </div>
+
+    <!-- Topic selection -->
+    <div>
+      <label class="block font-semibold mb-2">Select Aptitude Topics</label>
+
+      <div class="grid grid-cols-2 gap-3">
+        <label class="flex items-center space-x-2">
+          <input type="checkbox" /> <span>Arithmetic</span>
+        </label>
+        <label class="flex items-center space-x-2">
+          <input type="checkbox" /> <span>Algebra</span>
+        </label>
+        <label class="flex items-center space-x-2">
+          <input type="checkbox" /> <span>Geometry</span>
+        </label>
+        <label class="flex items-center space-x-2">
+          <input type="checkbox" /> <span>Number Systems</span>
+        </label>
+        <label class="flex items-center space-x-2">
+          <input type="checkbox" /> <span>Probability</span>
+        </label>
+        <label class="flex items-center space-x-2">
+          <input type="checkbox" /> <span>Data Interpretation</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Start button -->
+    <div class="text-center">
+      <button class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-lg">
+        Start Quiz
+      </button>
+    </div>
+  </div>
+</body>
+</html>

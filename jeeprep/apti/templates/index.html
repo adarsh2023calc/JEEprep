@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiz Sections</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  
 </head>
 <body class="bg-gray-100 p-10">
   <div class="max-w-xl mx-auto space-y-6">
@@ -20,8 +21,8 @@
     </div>
 
     <div class="bg-white p-6 rounded-2xl shadow">
-      <h2 class="text-2xl font-semibold mb-3">Quantitative Section</h2>
-      <button onclick="goToQuiz('quantitative')" class="px-5 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700">
+      <h2 class="text-2xl font-semibold mb-3">Verbals Section</h2>
+      <button onclick="goToQuiz('verbals')" class="px-5 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700">
         Start Quantitative Quiz
       </button>
     </div>
@@ -38,8 +39,7 @@
   <script>
     function goToQuiz(section) {
       alert("Going to " + section + " quiz...");
-      // Replace with navigation when quiz pages exist
-      // window.location.href = section + "_quiz.html";
+      window.location.href = "/"+section+"_"+"quiz.html";
     }
   </script>
 

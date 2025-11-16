@@ -7,3 +7,6 @@ from django.shortcuts import render
 def main_backend_page(request):
 
     return render(request,"index.html")
+
+def aptitude_quiz(request):
+    return render(request, "aptitude_quiz.html")
