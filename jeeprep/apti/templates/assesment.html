@@ -8,6 +8,11 @@
 </head>
 <body class="bg-gray-100 p-6">
   <div class="max-w-6xl mx-auto bg-white p-6 rounded-xl shadow-xl">
+    <div class="flex justify-end mb-4">
+      <div id="timerBox" class="text-xl font-bold px-4 py-2 bg-gray-800 text-white rounded-lg">
+           1:00
+      </div>
+    </div>
     <!-- Question Display -->
     <div id="question-container" class="mb-6">
       <h2 class="text-xl font-semibold mb-4">Question <span id="qNumber">1</span></h2>
@@ -139,6 +144,42 @@ document.getElementById("prevBtn").onclick = () => {
 
 loadQuestion();
 renderBadges();
+
+
+
+
+let totalSeconds = 1 * 60;
+
+function startTimer() {
+  const timerBox = document.getElementById("timerBox");
+
+  const interval = setInterval(() => {
+    let minutes = Math.floor(totalSeconds / 60);
+    let seconds = totalSeconds % 60;
+
+    timerBox.textContent =
+      `${minutes.toString().padStart(2, "0")}:` +
+      `${seconds.toString().padStart(2, "0")}`;
+
+    // Last 1 minute turn red
+    if (totalSeconds <= 60) {
+      timerBox.classList.remove("bg-gray-800");
+      timerBox.classList.add("bg-red-600");
+    }
+
+    // When time ends → auto submit
+    if (totalSeconds <= 0) {
+      clearInterval(interval);
+      alert("Time is up! Submitting test...");
+      document.getElementById("submitContainer").querySelector("button").click();
+      return;
+    }
+
+    totalSeconds--;
+  }, 1000);
+}
+
+document.addEventListener("DOMContentLoaded", startTimer);
 
 </script>
 </body>
