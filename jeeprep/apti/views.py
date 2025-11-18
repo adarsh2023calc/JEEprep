@@ -16,3 +16,11 @@ def software_quiz(request):
 def verbals_quiz(request):
     return render(request, "verbals_quiz.html")
 
+
+def assesment_quiz(request):
+    return render(request,"assesment.html")
+
+def gotojs(request):
+    return render(request,"goto.js")
+
+

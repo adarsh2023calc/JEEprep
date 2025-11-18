@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Assessment Page</title>
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-6xl mx-auto bg-white p-6 rounded-xl shadow-xl">
+    <!-- Question Display -->
+    <div id="question-container" class="mb-6">
+      <h2 class="text-xl font-semibold mb-4">Question <span id="qNumber">1</span></h2>
+      <p id="questionText" class="text-gray-700 text-lg mb-3">Loading question...</p>
+      <div class ="flex-col mb-6" id="optionBadge"></div>
+    </div>
+
+    <!-- Question Badges -->
+    <div class="flex flex gap-5 mb-3" id="questionBadges"></div>
+    
+
+    <!-- Navigation Buttons -->
+    <div class="flex justify-between mt-6">
+      <button id="prevBtn" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-black rounded-lg">Previous</button>
+      <button id="nextBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Next</button>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center mt-8 hidden" id="submitContainer">
+      <button class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl text-lg">Submit Test</button>
+    </div>
+
+  </div>
+
+  <script>
+    const questions = [
+  "What is the capital of France?",
+  "Solve: 12 * 8",
+  "What is the largest planet?",
+  "Who wrote Hamlet?",
+  "The speed of light is?"
+];
+
+const options = [
+  ["Paris", "London", "Rome", "Berlin"],
+  ["80", "96", "108", "120"],
+  ["Earth", "Mars", "Jupiter", "Saturn"],
+  ["Charles Dickens", "William Shakespeare", "Leo Tolstoy", "Mark Twain"],
+  ["300,000 km/s", "150,000 km/s", "1,000 km/s", "30,000 km/s"]
+];
+
+let current = 0;
+let attempted = Array(questions.length).fill(false);
+
+// store user's choice (index of selected option)
+let userAnswers = Array(questions.length).fill(null);
+
+const qText = document.getElementById("questionText");
+const qNum = document.getElementById("qNumber");
+const badges = document.getElementById("questionBadges");
+const submitContainer = document.getElementById("submitContainer");
+const optionBadge = document.getElementById("optionBadge");
+
+function loadQuestion() {
+  qText.textContent = questions[current];
+  qNum.textContent = current + 1;
+
+  submitContainer.classList.toggle("hidden", current !== questions.length - 1);
+
+  const qOptions = options[current];
+  optionBadge.innerHTML = "";
+
+  qOptions.forEach((opt, index) => {
+    const label = document.createElement("label");
+    label.className = "flex items-center gap-3 px-4 py-2 bg-gray-200 rounded-xl cursor-pointer hover:bg-gray-300 transition-all mb-2";
+
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = "optionSelect";
+    radio.value = index;
+
+    // restore previously selected option
+    if (userAnswers[current] === index) {
+      radio.checked = true;
+    }
+
+    // save selection on click
+    radio.onchange = () => {
+      userAnswers[current] = index;
+      attempted[current] = true;
+      renderBadges();
+    };
+
+    const letter = String.fromCharCode(97 + index); // a, b, c, d
+    const text = document.createElement("span");
+    text.textContent = `${letter}) ${opt}`;
+
+    label.appendChild(radio);
+    label.appendChild(text);
+
+    optionBadge.appendChild(label);
+  });
+}
+
+function renderBadges() {
+  badges.innerHTML = "";
+
+  questions.forEach((_, i) => {
+    const btn = document.createElement("button");
+    btn.textContent = i + 1;
+
+    btn.className =
+      "w-10 h-10 rounded-full text-white text-sm " +
+      (attempted[i]
+        ? "bg-green-600 hover:bg-green-700"
+        : "bg-blue-600 hover:bg-blue-700");
+
+    btn.onclick = () => {
+      current = i;
+      loadQuestion();
+    };
+
+    badges.appendChild(btn);
+  });
+}
+
+document.getElementById("nextBtn").onclick = () => {
+  attempted[current] = true;
+  if (current < questions.length - 1) current++;
+  loadQuestion();
+  renderBadges();
+};
+
+document.getElementById("prevBtn").onclick = () => {
+  if (current > 0) current--;
+  loadQuestion();
+  renderBadges();
+};
+
+loadQuestion();
+renderBadges();
+
+</script>
+</body>
+</html>

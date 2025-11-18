@@ -9,7 +9,7 @@
 <body class="bg-gray-100 p-10">
   <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow space-y-6">
     <h1 class="text-3xl font-bold text-center mb-4">Verbals Quiz Settings</h1>
-
+    
     <!-- Number of questions -->
     <div>
       <label class="block font-semibold mb-1">Number of Questions</label>
@@ -39,10 +39,9 @@
             </div>
 
             <!-- Topic selection -->
-        <div>
-        <label class="block font-semibold mb-2">Select Softaware Topics</label>
+        
         <div class="grid grid-cols-2 gap-3">
-            <div>
+          
             <label class="block font-semibold mb-2">Select Verbal Topics</label>
 
 
@@ -67,14 +66,22 @@
             </label>
 
             </div>
-        </div>
+          </div>
+        
 
     <!-- Start button -->
-    <div class="text-center">
+    <div onclick="goToQuiz()" class="text-center p-10">
       <button class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-lg">
         Start Quiz
       </button>
     </div>
+    
   </div>
+  <script>
+    function goToQuiz() {
+      window.location.href = "/"+"assesment.html";
+    }
+ 
+  </script>
 </body>
 </html>

@@ -7,6 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-10">
+  
   <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow space-y-6">
     <h1 class="text-3xl font-bold text-center mb-4">Aptitude Quiz Settings</h1>
 
@@ -66,10 +67,18 @@
 
     <!-- Start button -->
     <div class="text-center">
-      <button class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-lg">
+      <button onclick="goToQuiz()" class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-lg">
         Start Quiz
       </button>
     </div>
   </div>
+  
+  
+    <script>
+    function goToQuiz() {
+      window.location.href = "/"+ "assesment.html";
+    }
+ 
+  </script>
 </body>
 </html>

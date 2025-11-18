@@ -17,13 +17,15 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from apti.views import main_backend_page,aptitude_quiz,software_quiz,verbals_quiz
+from apti.views import main_backend_page,aptitude_quiz,software_quiz,verbals_quiz,assesment_quiz
 
 urlpatterns = [
     path("", main_backend_page),
     path("aptitude_quiz.html", aptitude_quiz),
     path("software_quiz.html",software_quiz),
-    path("verbals_quiz.html",verbals_quiz)
+    path("verbals_quiz.html",verbals_quiz),
+    path("assesment.html",assesment_quiz),
+    
 ]
 
 
