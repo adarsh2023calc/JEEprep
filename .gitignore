@@ -2,3 +2,7 @@
 
 jeeprep/apti/__pycache__
 jeeprep/jeeprep/__pycache__
+env
+jeeprep/apti/migrations/__pycache__
+jeeprep/apti/api_logic/__pycache__
+jeeprep/.env

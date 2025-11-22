@@ -5,7 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aptitude Quiz Selector</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+  
+      function getCookie(name) {
+          let cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              const cookies = document.cookie.split(';');
+              for (let cookie of cookies) {
+                  cookie = cookie.trim();
+                  if (cookie.startsWith(name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+      const csrftoken = getCookie('csrftoken');
+</script>
 </head>
+
+
+
+
+
 <body class="bg-gray-100 p-10">
   <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow space-y-6">
     <h1 class="text-3xl font-bold text-center mb-4">Softaware Quiz Settings</h1>
@@ -14,19 +37,19 @@
     <form>
     <div>
       <label class="block font-semibold mb-1">Number of Questions</label>
-      <input type="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter number of questions" />
+      <input type="number" id="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter number of questions" />
     </div>
 
     <!-- Time allotted -->
     <div>
       <label class="block font-semibold mb-1">Time Allotted (minutes)</label>
-      <input type="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter time in minutes" />
+      <input id="time" type="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter time in minutes" />
     </div>
 
     <!-- Difficulty level -->
     <div>
       <label class="block font-semibold mb-1">Difficulty Level</label>
-            <select class="w-full border p-2 rounded-lg">
+            <select id="difficulty" class="w-full border p-2 rounded-lg">
                 <option>Easy</option>
                 <option>Medium</option>
                 <option>Hard</option>
@@ -36,7 +59,7 @@
             <!-- Negative marking -->
             <div class="flex items-center space-x-3">
             <label class="font-semibold">Negative Marking</label>
-            <input type="checkbox" class="w-5 h-5" />
+            <input id="negative" type="checkbox" class="w-5 h-5" />
             </div>
 
             <!-- Topic selection -->
@@ -44,22 +67,22 @@
             <label class="block font-semibold mb-2">Select Softaware Topics</label>
                             <div class="grid grid-cols-2 gap-3">
         <label class="flex items-center space-x-2">
-        <input type="checkbox" /> <span>Operating Systems</span>
+        <input id="os" type="checkbox" /> <span>Operating Systems</span>
         </label>
         <label class="flex items-center space-x-2">
-        <input type="checkbox" /> <span>DBMS</span>
+        <input id="dbms" type="checkbox" /> <span>DBMS</span>
         </label>
         <label class="flex items-center space-x-2">
-        <input type="checkbox" /> <span>Networks</span>
+        <input id="networks" type="checkbox" /> <span>Networks</span>
         </label>
         <label class="flex items-center space-x-2">
-        <input type="checkbox" /> <span>Algorithms</span>
+        <input id="algo" type="checkbox" /> <span>Algorithms</span>
         </label>
         <label class="flex items-center space-x-2">
-        <input type="checkbox" /> <span>Data Structures</span>
+        <input id="ds" type="checkbox" /> <span>Data Structures</span>
         </label>
         <label class="flex items-center space-x-2">
-        <input type="checkbox" /> <span>Cybersecurity</span>
+        <input id="cyber"type="checkbox" /> <span>Cybersecurity</span>
         </label>
         </div>
       </div>
@@ -75,8 +98,42 @@
   </div>
   <script>
     function goToQuiz() {
+      event.preventDefault(); // stop page reload
+      const data={
+        "number":Number(document.getElementById("number").textContent),
+         "time":Number(document.getElementById("time").textContent),
+         "difficulty": document.getElementById("difficulty").value,
+         "isNegative": document.getElementById("negative").checked,
+         "topics": {
+             "os": document.getElementById("os").checked,
+             "dbms": document.getElementById("dbms").checked,
+             "networks": document.getElementById("networks").checked,
+             "algorithms": document.getElementById("algo").checked,
+             "DS":document.getElementById("ds").checked,
+             "cyber": document.getElementById("cyber").checked
+         }
+      }
+      
+
+      
+
+      fetch("/api/generate_quiz/",{
+        method:"POST",
+        headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken
+      },
+        body: JSON.stringify(data)
+      }).then(response => response.json).then(result => {
+
+        console.log("Saved",Result);
+        alert(Result)
+      }).catch( error => {
+        console.log("Error in fetching Quiz! Please try again");
+      });
       window.location.href = "/"+"assesment.html";
     }
+    
  
   </script>
 
