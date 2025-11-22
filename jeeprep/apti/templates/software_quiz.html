@@ -126,10 +126,11 @@
         body: JSON.stringify(data)
       }).then(response => response.json).then(result => {
 
-        console.log("Saved",Result);
-        alert(Result)
+        localStorage.setItem("quiz_data", JSON.stringify(result));
+        console.log("Saved",result);
+        
       }).catch( error => {
-        console.log("Error in fetching Quiz! Please try again");
+        console.error("Error in fetching Quiz! Please try again" ,error);  
       });
       window.location.href = "/"+"assesment.html";
     }
