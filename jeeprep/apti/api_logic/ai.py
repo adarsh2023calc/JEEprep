@@ -25,7 +25,7 @@ def generate_questions(topics, number, difficulty):
       }}
     ]
     """
-    print(prompt)
+    
     model = genai.GenerativeModel("gemini-2.0-flash")
 
     response = model.generate_content(
@@ -33,7 +33,7 @@ def generate_questions(topics, number, difficulty):
         generation_config={"response_mime_type": "application/json"}
     )
 
-    print(response)
+   
     # ---- FIX: extract JSON response properly ----
     try:
         text = response.candidates[0].content.parts[0].text
