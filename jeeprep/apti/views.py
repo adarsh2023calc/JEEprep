@@ -29,22 +29,22 @@ class QuizSettingsRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView
 @method_decorator(csrf_exempt, name='dispatch')
 class GenerateQuizView(APIView):
     def post(self, request):
-        number = request.data.get("number", 10)
+        number = int(request.data.get("number", 10))
         difficulty = request.data.get("difficulty", "easy")
-        topics = request.data.get("topics", {})
-
+        topics = request.data.get("topics", [])
+        print("Number is",number)
         try:
             questions = generate_questions(
                 topics=topics,
                 number=number,
                 difficulty=difficulty
             )
+
             return Response({"questions": questions}, status=200)
+
         except Exception as e:
             return Response({"error": str(e)}, status=500)
-
-
-# -----------------------------
+    # -----------------------------
 # HTML PAGES — SET CSRF COOKIE HERE
 # -----------------------------
 @ensure_csrf_cookie

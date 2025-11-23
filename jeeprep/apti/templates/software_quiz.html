@@ -5,137 +5,150 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aptitude Quiz Selector</title>
   <script src="https://cdn.tailwindcss.com"></script>
+
   <script>
-  
-      function getCookie(name) {
-          let cookieValue = null;
-          if (document.cookie && document.cookie !== '') {
-              const cookies = document.cookie.split(';');
-              for (let cookie of cookies) {
-                  cookie = cookie.trim();
-                  if (cookie.startsWith(name + '=')) {
-                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                      break;
-                  }
-              }
-          }
-          return cookieValue;
+    function getCookie(name) {
+      let cookieValue = null;
+      const cookies = document.cookie.split(";");
+
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        }
       }
-      const csrftoken = getCookie('csrftoken');
-</script>
+      return cookieValue;
+    }
+
+    const csrftoken = getCookie("csrftoken");
+  </script>
 </head>
 
-
-
-
-
 <body class="bg-gray-100 p-10">
+
   <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow space-y-6">
-    <h1 class="text-3xl font-bold text-center mb-4">Softaware Quiz Settings</h1>
+    <h1 class="text-3xl font-bold text-center mb-4">Software Quiz Settings</h1>
 
-    <!-- Number of questions -->
-    <form>
-    <div>
-      <label class="block font-semibold mb-1">Number of Questions</label>
-      <input type="number" id="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter number of questions" />
-    </div>
+    <form id="quizForm" class="space-y-5">
 
-    <!-- Time allotted -->
-    <div>
-      <label class="block font-semibold mb-1">Time Allotted (minutes)</label>
-      <input id="time" type="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter time in minutes" />
-    </div>
+      <!-- Number of questions -->
+      <div>
+        <label class="block font-semibold mb-1">Number of Questions</label>
+        <input type="number" id="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter number of questions">
+      </div>
 
-    <!-- Difficulty level -->
-    <div>
-      <label class="block font-semibold mb-1">Difficulty Level</label>
-            <select id="difficulty" class="w-full border p-2 rounded-lg">
-                <option>Easy</option>
-                <option>Medium</option>
-                <option>Hard</option>
-            </select>
-            </div>
+      <!-- Time allotted -->
+      <div>
+        <label class="block font-semibold mb-1">Time Allotted (minutes)</label>
+        <input type="number" id="time" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter time">
+      </div>
 
-            <!-- Negative marking -->
-            <div class="flex items-center space-x-3">
-            <label class="font-semibold">Negative Marking</label>
-            <input id="negative" type="checkbox" class="w-5 h-5" />
-            </div>
+      <!-- Difficulty -->
+      <div>
+        <label class="block font-semibold mb-1">Difficulty Level</label>
+        <select id="difficulty" class="w-full border p-2 rounded-lg">
+          <option>Easy</option>
+          <option>Medium</option>
+          <option>Hard</option>
+        </select>
+      </div>
 
-            <!-- Topic selection -->
-            <div>
-            <label class="block font-semibold mb-2">Select Softaware Topics</label>
-                            <div class="grid grid-cols-2 gap-3">
-        <label class="flex items-center space-x-2">
-        <input id="os" type="checkbox" /> <span>Operating Systems</span>
-        </label>
-        <label class="flex items-center space-x-2">
-        <input id="dbms" type="checkbox" /> <span>DBMS</span>
-        </label>
-        <label class="flex items-center space-x-2">
-        <input id="networks" type="checkbox" /> <span>Networks</span>
-        </label>
-        <label class="flex items-center space-x-2">
-        <input id="algo" type="checkbox" /> <span>Algorithms</span>
-        </label>
-        <label class="flex items-center space-x-2">
-        <input id="ds" type="checkbox" /> <span>Data Structures</span>
-        </label>
-        <label class="flex items-center space-x-2">
-        <input id="cyber"type="checkbox" /> <span>Cybersecurity</span>
-        </label>
+      <!-- Negative -->
+      <div class="flex items-center space-x-3">
+        <label class="font-semibold">Negative Marking</label>
+        <input id="negative" type="checkbox" class="w-5 h-5">
+      </div>
+
+      <!-- Topics -->
+      <div>
+        <label class="block font-semibold mb-2">Select Software Topics</label>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="flex items-center space-x-2"><input id="os" type="checkbox"> <span>Operating Systems</span></label>
+          <label class="flex items-center space-x-2"><input id="dbms" type="checkbox"> <span>DBMS</span></label>
+          <label class="flex items-center space-x-2"><input id="networks" type="checkbox"> <span>Networks</span></label>
+          <label class="flex items-center space-x-2"><input id="algo" type="checkbox"> <span>Algorithms</span></label>
+          <label class="flex items-center space-x-2"><input id="ds" type="checkbox"> <span>Data Structures</span></label>
+          <label class="flex items-center space-x-2"><input id="cyber" type="checkbox"> <span>Cybersecurity</span></label>
         </div>
       </div>
-    </div>
 
-    <!-- Start button -->
-    <div class="text-center">
-      <button onclick="goToQuiz()" class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-lg">
-        Start Quiz
-      </button>
-    </div>
-  </form>
+      <div class="text-center">
+        <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-lg">
+          Start Quiz
+        </button>
+      </div>
+
+    </form>
   </div>
+
   <script>
-    function goToQuiz() {
-      event.preventDefault(); // stop page reload
-      const data={
-        "number":Number(document.getElementById("number").textContent),
-         "time":Number(document.getElementById("time").textContent),
-         "difficulty": document.getElementById("difficulty").value,
-         "isNegative": document.getElementById("negative").checked,
-         "topics": {
-             "os": document.getElementById("os").checked,
-             "dbms": document.getElementById("dbms").checked,
-             "networks": document.getElementById("networks").checked,
-             "algorithms": document.getElementById("algo").checked,
-             "DS":document.getElementById("ds").checked,
-             "cyber": document.getElementById("cyber").checked
-         }
+    document.getElementById("quizForm").addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      // collect and validate data
+      const number = parseInt(document.getElementById("number").value);
+      const time = parseInt(document.getElementById("time").value);
+
+      if (!number || number < 1) {
+        alert("Enter a valid number of questions.");
+        return;
       }
-      
 
-      
+      const topics = {
+        os: document.getElementById("os").checked,
+        dbms: document.getElementById("dbms").checked,
+        networks: document.getElementById("networks").checked,
+        algorithms: document.getElementById("algo").checked,
+        DS: document.getElementById("ds").checked,
+        cyber: document.getElementById("cyber").checked
+      };
 
-      fetch("/api/generate_quiz/",{
-        method:"POST",
-        headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrftoken
-      },
-        body: JSON.stringify(data)
-      }).then(response => response.json).then(result => {
+      // ensure at least one topic checked
+      if (!Object.values(topics).some(v => v === true)) {
+        alert("Please select at least one topic.");
+        return;
+      }
 
+      const data = {
+        number: number,
+        time: time || 10,
+        difficulty: document.getElementById("difficulty").value,
+        isNegative: document.getElementById("negative").checked,
+        topics: topics
+      };
+
+      console.log("Sending to backend:", data);
+
+      try {
+        const response = await fetch("/api/generate_quiz/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken
+          },
+          body: JSON.stringify(data)
+        });
+
+        const raw = await response.text();
+        console.log("RAW RESPONSE:", raw);
+
+        const result = JSON.parse(raw);
+        console.log("FINAL RESULT:", result);
+
+        // save result only after valid JSON
         localStorage.setItem("quiz_data", JSON.stringify(result));
-        console.log("Saved",result);
-        
-      }).catch( error => {
-        console.error("Error in fetching Quiz! Please try again" ,error);  
-      });
-      window.location.href = "/"+"assesment.html";
-    }
-    
- 
+        localStorage.setItem("number", data.number);
+        localStorage.setItem("time", data.time);
+        localStorage.setItem("isNegative", data.isNegative);
+
+        // redirect only after success
+        window.location.href = "/assesment.html";
+
+      } catch (err) {
+        console.error("Quiz Generation Error:", err);
+        alert("Error generating quiz. Please try again.");
+      }
+    });
   </script>
 
 </body>

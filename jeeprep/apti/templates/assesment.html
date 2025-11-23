@@ -10,7 +10,6 @@
   <div class="max-w-6xl mx-auto bg-white p-6 rounded-xl shadow-xl">
     <div class="flex justify-end mb-4">
       <div id="timerBox" class="text-xl font-bold px-4 py-2 bg-gray-800 text-white rounded-lg">
-           1:00
       </div>
     </div>
     <!-- Question Display -->
@@ -38,117 +37,126 @@
   </div>
 
   <script>
-    const questions = [
-  "What is the capital of France?",
-  "Solve: 12 * 8",
-  "What is the largest planet?",
-  "Who wrote Hamlet?",
-  "The speed of light is?"
-];
+  
 
-const options = [
-  ["Paris", "London", "Rome", "Berlin"],
-  ["80", "96", "108", "120"],
-  ["Earth", "Mars", "Jupiter", "Saturn"],
-  ["Charles Dickens", "William Shakespeare", "Leo Tolstoy", "Mark Twain"],
-  ["300,000 km/s", "150,000 km/s", "1,000 km/s", "30,000 km/s"]
-];
+  const data = JSON.parse(localStorage.getItem("quiz_data"));
 
-let current = 0;
-let attempted = Array(questions.length).fill(false);
+  console.log("data",data);
+  if (!data) {
+    alert("Quiz data missing. Please generate again.");
+    window.location.href = "/";
+  }
 
-// store user's choice (index of selected option)
-let userAnswers = Array(questions.length).fill(null);
+  const question_list= data.questions;
+  const questions = question_list.map(key =>key.question);
+  const options = question_list.map(key => key.options);
+  const answer = question_list.map(key => key.answer);
 
-const qText = document.getElementById("questionText");
-const qNum = document.getElementById("qNumber");
-const badges = document.getElementById("questionBadges");
-const submitContainer = document.getElementById("submitContainer");
-const optionBadge = document.getElementById("optionBadge");
 
-function loadQuestion() {
-  qText.textContent = questions[current];
-  qNum.textContent = current + 1;
+  let current = 0;
+  let attempted = Array(questions.length).fill(false);
 
-  submitContainer.classList.toggle("hidden", current !== questions.length - 1);
+  const time = localStorage.getItem("time");
 
-  const qOptions = options[current];
-  optionBadge.innerHTML = "";
 
-  qOptions.forEach((opt, index) => {
-    const label = document.createElement("label");
-    label.className = "flex items-center gap-3 px-4 py-2 bg-gray-200 rounded-xl cursor-pointer hover:bg-gray-300 transition-all mb-2";
+  // store user's choice (index of selected option)
+  let userAnswers = Array(questions.length).fill(null);
 
-    const radio = document.createElement("input");
-    radio.type = "radio";
-    radio.name = "optionSelect";
-    radio.value = index;
+  const qText = document.getElementById("questionText");
+  const qNum = document.getElementById("qNumber");
+  const badges = document.getElementById("questionBadges");
+  const submitContainer = document.getElementById("submitContainer");
+  const optionBadge = document.getElementById("optionBadge");
 
-    // restore previously selected option
-    if (userAnswers[current] === index) {
-      radio.checked = true;
-    }
+  function loadQuestion() {
+    qText.textContent = questions[current];
+    qNum.textContent = current + 1;
 
-    // save selection on click
-    radio.onchange = () => {
-      userAnswers[current] = index;
-      attempted[current] = true;
-      renderBadges();
-    };
+    submitContainer.classList.toggle("hidden", current !== questions.length - 1);
 
-    const letter = String.fromCharCode(97 + index); // a, b, c, d
-    const text = document.createElement("span");
-    text.textContent = `${letter}) ${opt}`;
+    const qOptions = options[current];
+    optionBadge.innerHTML = "";
 
-    label.appendChild(radio);
-    label.appendChild(text);
+    console.log("current =", current);
+    console.log("questions =", questions);
+    console.log("current question =", questions[current]);
+    console.log("options =", questions[current]?.options);
 
-    optionBadge.appendChild(label);
-  });
-}
 
-function renderBadges() {
-  badges.innerHTML = "";
+    qOptions.forEach((opt, index) => {
+      const label = document.createElement("label");
+      label.className = "flex items-center gap-3 px-4 py-2 bg-gray-200 rounded-xl cursor-pointer hover:bg-gray-300 transition-all mb-2";
 
-  questions.forEach((_, i) => {
-    const btn = document.createElement("button");
-    btn.textContent = i + 1;
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = "optionSelect";
+      radio.value = index;
 
-    btn.className =
-      "w-10 h-10 rounded-full text-white text-sm " +
-      (attempted[i]
-        ? "bg-green-600 hover:bg-green-700"
-        : "bg-blue-600 hover:bg-blue-700");
+      // restore previously selected option
+      if (userAnswers[current] === index) {
+        radio.checked = true;
+      }
 
-    btn.onclick = () => {
-      current = i;
-      loadQuestion();
-    };
+      // save selection on click
+      radio.onchange = () => {
+        userAnswers[current] = index;
+        attempted[current] = true;
+        renderBadges();
+      };
 
-    badges.appendChild(btn);
-  });
-}
+      const letter = String.fromCharCode(97 + index); // a, b, c, d
+      const text = document.createElement("span");
+      text.textContent = `${letter}) ${opt}`;
 
-document.getElementById("nextBtn").onclick = () => {
-  attempted[current] = true;
-  if (current < questions.length - 1) current++;
+      label.appendChild(radio);
+      label.appendChild(text);
+
+      optionBadge.appendChild(label);
+    });
+  }
+
+  function renderBadges() {
+    badges.innerHTML = "";
+
+    questions.forEach((_, i) => {
+      const btn = document.createElement("button");
+      btn.textContent = i + 1;
+
+      btn.className =
+        "w-10 h-10 rounded-full text-white text-sm " +
+        (attempted[i]
+          ? "bg-green-600 hover:bg-green-700"
+          : "bg-blue-600 hover:bg-blue-700");
+
+      btn.onclick = () => {
+        current = i;
+        loadQuestion();
+      };
+
+      badges.appendChild(btn);
+    });
+  }
+
+  document.getElementById("nextBtn").onclick = () => {
+    attempted[current] = true;
+    if (current < questions.length - 1) current++;
+    loadQuestion();
+    renderBadges();
+  };
+
+  document.getElementById("prevBtn").onclick = () => {
+    if (current > 0) current--;
+    loadQuestion();
+    renderBadges();
+  };
+
   loadQuestion();
   renderBadges();
-};
-
-document.getElementById("prevBtn").onclick = () => {
-  if (current > 0) current--;
-  loadQuestion();
-  renderBadges();
-};
-
-loadQuestion();
-renderBadges();
 
 
 
 
-let totalSeconds = 1 * 60;
+let totalSeconds = time * 60;
 
 function startTimer() {
   const timerBox = document.getElementById("timerBox");

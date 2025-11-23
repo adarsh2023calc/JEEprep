@@ -6,7 +6,7 @@ genai.configure(api_key=settings.GEMINI_API_KEY)
 
 def generate_questions(topics, number, difficulty):
     selected_topics = [t for t, selected in topics.items() if selected]
-
+    
     prompt = f"""
     Generate {number} multiple choice questions (MCQs) from the following topics:
     Topics: {', '.join(selected_topics)}
@@ -25,7 +25,7 @@ def generate_questions(topics, number, difficulty):
       }}
     ]
     """
-
+    print(prompt)
     model = genai.GenerativeModel("gemini-2.0-flash")
 
     response = model.generate_content(
@@ -33,10 +33,13 @@ def generate_questions(topics, number, difficulty):
         generation_config={"response_mime_type": "application/json"}
     )
 
+    print(response)
     # ---- FIX: extract JSON response properly ----
     try:
         text = response.candidates[0].content.parts[0].text
+        print(text)
         return json.loads(text)
+
 
     except Exception as e:
         # Helpful debug print
