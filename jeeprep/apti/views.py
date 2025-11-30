@@ -66,3 +66,7 @@ def software_quiz(request):
 
 def verbals_quiz(request):
     return render(request, "verbals_quiz.html")
+
+
+def score_view(request):
+    return render(request,"score.html")

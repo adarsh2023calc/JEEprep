@@ -12,6 +12,8 @@ def generate_questions(topics, number, difficulty):
     Topics: {', '.join(selected_topics)}
     Difficulty: {difficulty}
 
+    Here the questions should be of standard asked in placement tests like TCS NQT
+    
     STRICT OUTPUT:
     - Output ONLY valid JSON.
     - Format:

@@ -31,7 +31,7 @@
 
     <!-- Submit Button -->
     <div class="text-center mt-8 hidden" id="submitContainer">
-      <button class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl text-lg">Submit Test</button>
+      <button onclick= "findScore()"class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl text-lg">Submit Test</button>
     </div>
 
   </div>
@@ -50,14 +50,14 @@
   const question_list= data.questions;
   const questions = question_list.map(key =>key.question);
   const options = question_list.map(key => key.options);
-  const answer = question_list.map(key => key.answer);
+  const answers = question_list.map(key => key.answer);
 
 
   let current = 0;
   let attempted = Array(questions.length).fill(false);
 
   const time = localStorage.getItem("time");
-
+  console.log("Time alloted is",time);
 
   // store user's choice (index of selected option)
   let userAnswers = Array(questions.length).fill(null);
@@ -138,7 +138,7 @@
   }
 
   document.getElementById("nextBtn").onclick = () => {
-    attempted[current] = true;
+    //attempted[current] = true;
     if (current < questions.length - 1) current++;
     loadQuestion();
     renderBadges();
@@ -179,12 +179,39 @@ function startTimer() {
     if (totalSeconds <= 0) {
       clearInterval(interval);
       alert("Time is up! Submitting test...");
+      
       document.getElementById("submitContainer").querySelector("button").click();
       return;
     }
 
     totalSeconds--;
   }, 1000);
+}
+
+function findScore(){
+   
+
+  // Count correct answers
+  const score = userAnswers
+    .map((selectedOptionIndex, questionIndex) => {
+      // if question was attempted and a valid option was selected
+      if (attempted[questionIndex] && selectedOptionIndex !== null) {
+        // compare the selected option text with the correct answer text
+        return options[questionIndex][selectedOptionIndex] === answers[questionIndex];
+      } else {
+        return false;
+      }
+    })
+    .reduce((sum, v) => sum + (v ? 1 : 0), 0);
+
+  // Save and navigate
+  localStorage.setItem("correct", score);
+  localStorage.setItem("num", questions.length);
+
+  // optional: log a summary
+  console.log(`Score: ${score} / ${questions.length}`);
+  window.location.href = "/score.html";
+  
 }
 
 document.addEventListener("DOMContentLoaded", startTimer);

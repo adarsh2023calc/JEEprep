@@ -6,27 +6,44 @@
   <title>Aptitude Quiz Selector</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<script>
+    function getCookie(name) {
+      let cookieValue = null;
+      const cookies = document.cookie.split(";");
+
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        }
+      }
+      return cookieValue;
+    }
+
+    const csrftoken = getCookie("csrftoken");
+  </script>
 <body class="bg-gray-100 p-10">
   
   <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow space-y-6">
     <h1 class="text-3xl font-bold text-center mb-4">Aptitude Quiz Settings</h1>
 
+    <form id="quizForm" class="space-y-5">
     <!-- Number of questions -->
     <div>
       <label class="block font-semibold mb-1">Number of Questions</label>
-      <input type="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter number of questions" />
+      <input type="number" id="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter number of questions" />
     </div>
 
     <!-- Time allotted -->
     <div>
       <label class="block font-semibold mb-1">Time Allotted (minutes)</label>
-      <input type="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter time in minutes" />
+      <input type="number" min="1" id="time" class="w-full border p-2 rounded-lg" placeholder="Enter time in minutes" />
     </div>
 
     <!-- Difficulty level -->
     <div>
       <label class="block font-semibold mb-1">Difficulty Level</label>
-      <select class="w-full border p-2 rounded-lg">
+      <select id="difficulty" class="w-full border p-2 rounded-lg">
         <option>Easy</option>
         <option>Medium</option>
         <option>Hard</option>
@@ -36,7 +53,7 @@
     <!-- Negative marking -->
     <div class="flex items-center space-x-3">
       <label class="font-semibold">Negative Marking</label>
-      <input type="checkbox" class="w-5 h-5" />
+      <input id="negative" type="checkbox" class="w-5 h-5" />
     </div>
 
     <!-- Topic selection -->
@@ -45,40 +62,110 @@
 
       <div class="grid grid-cols-2 gap-3">
         <label class="flex items-center space-x-2">
-          <input type="checkbox" /> <span>Arithmetic</span>
+          <input id="arithmetic" type="checkbox" /> <span>Arithmetic</span>
         </label>
         <label class="flex items-center space-x-2">
-          <input type="checkbox" /> <span>Algebra</span>
+          <input id="algebra" type="checkbox" /> <span>Algebra</span>
         </label>
         <label class="flex items-center space-x-2">
-          <input type="checkbox" /> <span>Geometry</span>
+          <input id="geometry" type="checkbox" /> <span>Geometry</span>
         </label>
         <label class="flex items-center space-x-2">
-          <input type="checkbox" /> <span>Number Systems</span>
+          <input id="number_system" type="checkbox" /> <span>Number Systems</span>
         </label>
         <label class="flex items-center space-x-2">
-          <input type="checkbox" /> <span>Probability</span>
+          <input id="probability" type="checkbox" /> <span>Probability</span>
         </label>
         <label class="flex items-center space-x-2">
-          <input type="checkbox" /> <span>Data Interpretation</span>
+          <input id="data_interpretation" type="checkbox" /> <span>Data Interpretation</span>
         </label>
       </div>
     </div>
 
     <!-- Start button -->
     <div class="text-center">
-      <button onclick="goToQuiz()" class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-lg">
+      <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-lg">
         Start Quiz
       </button>
     </div>
+    </form>
   </div>
   
   
     <script>
-    function goToQuiz() {
-      window.location.href = "/"+ "assesment.html";
-    }
- 
+    document.getElementById("quizForm").addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const overlay = document.getElementById("loadingOverlay");
+      overlay.classList.remove("hidden");
+      // collect and validate data
+      const number = parseInt(document.getElementById("number").value);
+      const time = parseInt(document.getElementById("time").value);
+
+      if (!number || number < 1) {
+        alert("Enter a valid number of questions.");
+        return;
+      }
+
+      const topics = {
+        arithmetic: document.getElementById("arithmetic").checked,
+        algebra: document.getElementById("algebra").checked,
+        data_interpretation: document.getElementById("data_interpretation").checked,
+        geometry: document.getElementById("geometry").checked,
+        probability: document.getElementById("probability").checked,
+        number_system: document.getElementById("number_system").checked
+      };
+
+      // ensure at least one topic checked
+      if (!Object.values(topics).some(v => v === true)) {
+        alert("Please select at least one topic.");
+        return;
+      }
+
+      const data = {
+        number: number,
+        time: time || 10,
+        difficulty: document.getElementById("difficulty").value,
+        isNegative: document.getElementById("negative").checked,
+        topics: topics
+      };
+
+      console.log("Sending to backend:", data);
+
+      try {
+        const response = await fetch("/api/generate_quiz/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken
+          },
+          body: JSON.stringify(data)
+        });
+
+        const raw = await response.text();
+        console.log("RAW RESPONSE:", raw);
+
+        const result = JSON.parse(raw);
+
+        localStorage.setItem("quiz_data",JSON.stringify(result));
+
+        // redirect only after success
+        window.location.href = "/assesment.html";
+
+      } catch (err) {
+        console.error("Quiz Generation Error:", err);
+        alert("Error generating quiz. Please try again.");
+      }
+
+      finally{
+        overlay.classList.add("hidden");
+      }
+
+    });
   </script>
+
+  <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="animate-spin h-16 w-16 border-4 border-white border-t-transparent rounded-full"></div>
+  </div>
 </body>
 </html>

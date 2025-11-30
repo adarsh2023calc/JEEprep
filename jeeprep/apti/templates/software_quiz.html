@@ -85,6 +85,8 @@
     document.getElementById("quizForm").addEventListener("submit", async function (event) {
       event.preventDefault();
 
+      const overlay = document.getElementById("loadingOverlay");
+      overlay.classList.remove("hidden");
       // collect and validate data
       const number = parseInt(document.getElementById("number").value);
       const time = parseInt(document.getElementById("time").value);
@@ -133,13 +135,8 @@
         console.log("RAW RESPONSE:", raw);
 
         const result = JSON.parse(raw);
-        console.log("FINAL RESULT:", result);
 
-        // save result only after valid JSON
-        localStorage.setItem("quiz_data", JSON.stringify(result));
-        localStorage.setItem("number", data.number);
-        localStorage.setItem("time", data.time);
-        localStorage.setItem("isNegative", data.isNegative);
+        localStorage.setItem("quiz_data",JSON.stringify(result));
 
         // redirect only after success
         window.location.href = "/assesment.html";
@@ -148,8 +145,17 @@
         console.error("Quiz Generation Error:", err);
         alert("Error generating quiz. Please try again.");
       }
+
+      finally{
+        overlay.classList.add("hidden");
+      }
+
     });
   </script>
+<!-- Full-screen loading overlay -->
+<div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="animate-spin h-16 w-16 border-4 border-white border-t-transparent rounded-full"></div>
+</div>
 
 </body>
 </html>

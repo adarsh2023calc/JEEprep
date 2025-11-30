@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Score Analysis</title>
+
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white shadow-lg rounded-2xl p-6 w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-4 text-center">Score Analysis</h2>
+
+    <!-- Pie Chart Canvas -->
+    <canvas id="scoreChart"></canvas>
+
+    <!-- Summary -->
+    <div class="mt-6 text-center space-y-1">
+      <p class="text-lg font-semibold">Correct: <span id="correctCount"></span></p>
+      <p class="text-lg font-semibold">Wrong: <span id="wrongCount"></span></p>
+      <p class="text-lg font-semibold">Unattempted: <span id="unattemptedCount"></span></p>
+    </div>
+  </div>
+
+  <script>
+    // Example data (replace these with your JS variables)
+    const correct = localStorage.getItem("correct");
+    const wrong = localStorage.getItem("num")-correct;
+    
+
+    // Update HTML text
+    document.getElementById("correctCount").textContent = correct;
+    document.getElementById("wrongCount").textContent = wrong;
+    
+
+    // Pie Chart Code
+    const ctx = document.getElementById("scoreChart");
+
+    new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: ["Correct", "Wrong"],
+        datasets: [{
+          data: [correct, wrong],
+          backgroundColor: [
+            "#22c55e",  // green
+            "#ef4444",  // red
+            "#a3a3a3"   // gray
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: "bottom"
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
