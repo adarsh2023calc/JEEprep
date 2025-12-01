@@ -124,7 +124,7 @@
 
       const data = {
         number: number,
-        time: time || 10,
+        time: time,
         difficulty: document.getElementById("difficulty").value,
         isNegative: document.getElementById("negative").checked,
         topics: topics
@@ -148,6 +148,8 @@
         const result = JSON.parse(raw);
 
         localStorage.setItem("quiz_data",JSON.stringify(result));
+
+        localStorage.setItem("time",time);
 
         // redirect only after success
         window.location.href = "/assesment.html";

@@ -63,12 +63,35 @@
       <div>
         <label class="block font-semibold mb-2">Select Software Topics</label>
         <div class="grid grid-cols-2 gap-3">
-          <label class="flex items-center space-x-2"><input id="os" type="checkbox"> <span>Operating Systems</span></label>
-          <label class="flex items-center space-x-2"><input id="dbms" type="checkbox"> <span>DBMS</span></label>
-          <label class="flex items-center space-x-2"><input id="networks" type="checkbox"> <span>Networks</span></label>
-          <label class="flex items-center space-x-2"><input id="algo" type="checkbox"> <span>Algorithms</span></label>
-          <label class="flex items-center space-x-2"><input id="ds" type="checkbox"> <span>Data Structures</span></label>
-          <label class="flex items-center space-x-2"><input id="cyber" type="checkbox"> <span>Cybersecurity</span></label>
+        <label class="flex items-center space-x-2"><input id="os" type="checkbox"> <span>Operating Systems</span></label>
+      <label class="flex items-center space-x-2"><input id="dbms" type="checkbox"> <span>Database Management Systems</span></label>
+      <label class="flex items-center space-x-2"><input id="networks" type="checkbox"> <span>Computer Networks</span></label>
+      <label class="flex items-center space-x-2"><input id="algo" type="checkbox"> <span>Algorithms</span></label>
+      <label class="flex items-center space-x-2"><input id="ds" type="checkbox"> <span>Data Structures</span></label>
+      <label class="flex items-center space-x-2"><input id="cyber" type="checkbox"> <span>Cybersecurity</span></label>
+
+      <label class="flex items-center space-x-2"><input id="oops" type="checkbox"> <span>Object-Oriented Programming</span></label>
+      <label class="flex items-center space-x-2"><input id="compiler" type="checkbox"> <span>Compiler Design</span></label>
+      <label class="flex items-center space-x-2"><input id="dsa" type="checkbox"> <span>Advanced DSA</span></label>
+
+      <label class="flex items-center space-x-2"><input id="ai" type="checkbox"> <span>Artificial Intelligence</span></label>
+      <label class="flex items-center space-x-2"><input id="ml" type="checkbox"> <span>Machine Learning</span></label>
+      <label class="flex items-center space-x-2"><input id="dl" type="checkbox"> <span>Deep Learning</span></label>
+      <label class="flex items-center space-x-2"><input id="dsml" type="checkbox"> <span>Data Science</span></label>
+
+      <label class="flex items-center space-x-2"><input id="cnc" type="checkbox"> <span>Computer Architecture</span></label>
+      <label class="flex items-center space-x-2"><input id="cloud" type="checkbox"> <span>Cloud Computing</span></label>
+      <label class="flex items-center space-x-2"><input id="devops" type="checkbox"> <span>DevOps</span></label>
+
+      <label class="flex items-center space-x-2"><input id="software" type="checkbox"> <span>Software Engineering</span></label>
+      <label class="flex items-center space-x-2"><input id="web" type="checkbox"> <span>Web Development</span></label>
+      <label class="flex items-center space-x-2"><input id="linux" type="checkbox"> <span>Linux Commands</span></label>
+      <label class="flex items-center space-x-2"><input id="sql" type="checkbox"> <span>SQL Queries</span></label>
+
+      <label class="flex items-center space-x-2"><input id="aptitude" type="checkbox"> <span>Aptitude & Reasoning</span></label>
+      <label class="flex items-center space-x-2"><input id="coding" type="checkbox"> <span>Coding (Python/Java/C++)</span></label>
+      <label class="flex items-center space-x-2"><input id="systemdesign" type="checkbox"> <span>System Design</span></label>
+
         </div>
       </div>
 
@@ -102,8 +125,30 @@
         networks: document.getElementById("networks").checked,
         algorithms: document.getElementById("algo").checked,
         DS: document.getElementById("ds").checked,
-        cyber: document.getElementById("cyber").checked
-      };
+        cyber: document.getElementById("cyber").checked,
+
+        oops: document.getElementById("oops").checked,
+        compiler: document.getElementById("compiler").checked,
+        dsa: document.getElementById("dsa").checked,
+
+        ai: document.getElementById("ai").checked,
+        ml: document.getElementById("ml").checked,
+        dl: document.getElementById("dl").checked,
+        dsml: document.getElementById("dsml").checked,
+
+        architecture: document.getElementById("cnc").checked,
+        cloud: document.getElementById("cloud").checked,
+        devops: document.getElementById("devops").checked,
+
+        software: document.getElementById("software").checked,
+        web: document.getElementById("web").checked,
+        linux: document.getElementById("linux").checked,
+        sql: document.getElementById("sql").checked,
+
+        aptitude: document.getElementById("aptitude").checked,
+        coding: document.getElementById("coding").checked,
+        systemdesign: document.getElementById("systemdesign").checked,
+};
 
       // ensure at least one topic checked
       if (!Object.values(topics).some(v => v === true)) {
@@ -111,9 +156,11 @@
         return;
       }
 
+
+      console.log("time",time);
       const data = {
         number: number,
-        time: time || 10,
+        time: time,
         difficulty: document.getElementById("difficulty").value,
         isNegative: document.getElementById("negative").checked,
         topics: topics
@@ -137,7 +184,7 @@
         const result = JSON.parse(raw);
 
         localStorage.setItem("quiz_data",JSON.stringify(result));
-
+        localStorage.setItem("time",time);
         // redirect only after success
         window.location.href = "/assesment.html";
 
