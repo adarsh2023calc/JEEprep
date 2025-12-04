@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.views.decorators.csrf import ensure_csrf_cookie,csrf_exempt
 from django.utils.decorators import method_decorator
+from rest_framework.decorators import api_view
 
 from .models import QuizSettings
 from .serializers import QuizSettingsSerializer
@@ -70,3 +71,25 @@ def verbals_quiz(request):
 
 def score_view(request):
     return render(request,"score.html")
+
+def leetcode_view(request):
+    return render(request,"editor.html")
+
+
+
+from .executor import run_python
+
+
+
+@api_view(["POST"])
+
+def run_code(request):
+    code = request.data.get("code", "")
+    lang = request.data.get("language", "python")
+
+    if lang == "python":
+        output = run_python(code)
+    else:
+        return Response({"error": "Unsupported language"}, status=400)
+
+    return Response({"output": output})

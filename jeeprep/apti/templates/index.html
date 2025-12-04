@@ -34,10 +34,23 @@
       </button>
     </div>
 
+    <div class="bg-white p-6 rounded-2xl shadow">
+      <h2 class="text-2xl font-semibold mb-3">Coding Test</h2>
+      <button onclick="goToQuiz('editor');" class="px-5 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700">
+        Start Coding test
+      </button>
+    </div>
+
   </div>
   <script>
     function goToQuiz(section){
+
+      if(section =="editor"){
+        window.location.href = "/"+section+".html";
+      }
+      else{
       window.location.href = "/" + section+"_"+"quiz.html";
+      }
     }
   </script>
 
