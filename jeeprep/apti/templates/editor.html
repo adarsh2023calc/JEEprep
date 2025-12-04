@@ -1,24 +1,149 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Online Judge</title>
+    <meta charset="UTF-8">
+    <title>Online Judge - LeetCode Style</title>
+
+    <!-- Monaco -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs/loader.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 30% 45% 25%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .panel {
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #ddd;
+        }
+
+        #editor-panel {
+            border-right: 1px solid #ddd;
+        }
+
+        #editor {
+            height: 70vh;
+            border: 1px solid #ccc;
+        }
+
+        h2, h3 {
+            margin-top: 0;
+        }
+
+        button {
+            background: #0d6efd;
+            border: none;
+            padding: 10px 18px;
+            color: white;
+            font-size: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0a58ca;
+        }
+
+        .testcase-box {
+            margin: 10px 0;
+        }
+
+        .testcase-box textarea {
+            width: 100%;
+            height: 70px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #bbb;
+            font-family: monospace;
+        }
+
+        pre {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            height: 200px;
+            overflow: auto;
+        }
+    </style>
 </head>
 <body>
 
-<h2>Code Editor (LeetCode Style)</h2>
+<div class="container">
 
-<div id="editor" style="height: 400px; border: 1px solid #ccc;"></div>
-<button onclick="run()">Run Code</button>
+    <!-- LEFT PANEL: Problem Description -->
+    <div class="panel">
+        <h2>Two Sum</h2>
+        <p>
+            Given an array of integers <b>nums</b> and an integer <b>target</b>, return indices of the two numbers
+            such that they add up to target.
+        </p>
 
-<pre id="output"></pre>
+        <h3>Example</h3>
+        <pre>
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+        </pre>
+
+        <h3>Constraints</h3>
+        <ul>
+            <li>2 ≤ nums.length ≤ 10⁴</li>
+            <li>-10⁹ ≤ nums[i] ≤ 10⁹</li>
+            <li>-10⁹ ≤ target ≤ 10⁹</li>
+        </ul>
+    </div>
+
+    <!-- MIDDLE PANEL: Monaco Editor -->
+    <div class="panel" id="editor-panel">
+        <h3>Code Editor</h3>
+        <div id="editor"></div>
+
+        <br>
+        <button onclick="run()">Run</button>
+    </div>
+
+    <!-- RIGHT PANEL: Test Cases + Output -->
+    <div class="panel">
+        <h3>Testcases</h3>
+
+        <div class="testcase-box">
+            <label>Input 1:</label>
+            <textarea id="testcase1">{"nums": [2,7,11,15], "target": 9}</textarea>
+        </div>
+
+        <div class="testcase-box p-2">
+            <label>Input 2:</label>
+            <textarea id="testcase2">{"nums": [3,2,4], "target": 6}</textarea>
+        </div>
+
+        <button onclick="run()">Run Testcases</button>
+
+        <h3 class="p-10">Output</h3>
+        <pre id="output"></pre>
+    </div>
+
+</div>
 
 <script>
 require.config({ paths: { "vs": "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs" }});
 
 require(["vs/editor/editor.main"], function () {
     window.editor = monaco.editor.create(document.getElementById('editor'), {
-        value: `print("Hello from Django Judge!")`,
+        value: `def twoSum(nums, target):
+    map = {}
+    for i,n in enumerate(nums):
+        if target - n in map:
+            return [map[target-n], i]
+        map[n] = i`,
         language: "python",
         theme: "vs-dark"
     });
@@ -26,11 +151,17 @@ require(["vs/editor/editor.main"], function () {
 
 async function run() {
     const code = editor.getValue();
+    const test1 = document.getElementById("testcase1").value;
+    const test2 = document.getElementById("testcase2").value;
 
     const response = await fetch("/api/run/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: code, language: "python" })
+        body: JSON.stringify({
+            code: code,
+            language: "python",
+            testcases: [test1, test2]
+        })
     });
 
     const data = await response.json();
