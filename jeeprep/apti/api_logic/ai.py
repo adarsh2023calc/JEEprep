@@ -12,7 +12,10 @@ def generate_questions(topics, number, difficulty):
     Topics: {', '.join(selected_topics)}
     Difficulty: {difficulty}
 
-    Here the questions should be of standard asked in placement tests like TCS NQT
+    Here the questions should be of standard asked in placement tests like TCS NQT, GATE,
+    JEE MAINS, JEE Advanced, Infosys.
+
+    Verify that these questions are not duplicates of GATE/JEE/TCS NQT archives.
     
     STRICT OUTPUT:
     - Output ONLY valid JSON.
@@ -22,7 +25,7 @@ def generate_questions(topics, number, difficulty):
         "question": "string",
         "options": ["opt1", "opt2", "opt3", "opt4"],
         "answer": "string",
-        "topic": "one of {selected_topics}",
+        "topic": "{selected_topics}",
         "difficulty": "{difficulty}"
       }}
     ]
@@ -39,7 +42,7 @@ def generate_questions(topics, number, difficulty):
     # ---- FIX: extract JSON response properly ----
     try:
         text = response.candidates[0].content.parts[0].text
-        print(text)
+
         return json.loads(text)
 
 

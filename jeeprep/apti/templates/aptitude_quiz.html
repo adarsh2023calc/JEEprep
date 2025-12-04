@@ -130,7 +130,7 @@
         topics: topics
       };
 
-      console.log("Sending to backend:", data);
+     
 
       try {
         const response = await fetch("/api/generate_quiz/", {
@@ -143,7 +143,7 @@
         });
 
         const raw = await response.text();
-        console.log("RAW RESPONSE:", raw);
+       
 
         const result = JSON.parse(raw);
 

@@ -179,8 +179,7 @@
         });
 
         const raw = await response.text();
-        console.log("RAW RESPONSE:", raw);
-
+        
         const result = JSON.parse(raw);
 
         localStorage.setItem("quiz_data",JSON.stringify(result));

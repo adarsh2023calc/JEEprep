@@ -187,13 +187,23 @@ function findScore(){
    
 
   // Count correct answers
+
+  let correctQuestions=[];
+  let incorrectQuestions= [];
+  let UnattemptedQuestions=[];
+
   const score = userAnswers
     .map((selectedOptionIndex, questionIndex) => {
       // if question was attempted and a valid option was selected
       if (attempted[questionIndex] && selectedOptionIndex !== null) {
         // compare the selected option text with the correct answer text
-        return options[questionIndex][selectedOptionIndex] === answers[questionIndex];
+        if (options[questionIndex][selectedOptionIndex] === answers[questionIndex]){
+          correctQuestions.push(question_list[questionIndex]);
+          return true;
+        }
+        incorrectQuestions.push(question_list[questionIndex]);
       } else {
+        UnattemptedQuestions.push(question_list[questionIndex]);
         return false;
       }
     })
@@ -201,7 +211,12 @@ function findScore(){
 
   // Save and navigate
   localStorage.setItem("correct", score);
-  localStorage.setItem("num", questions.length);
+  localStorage.setItem("incorrect", incorrectQuestions.length);
+  localStorage.setItem("unattempted",UnattemptedQuestions.length);
+  localStorage.setItem("correctQuestion",JSON.stringify(correctQuestions));
+  localStorage.setItem("incorrectQuestion",JSON.stringify(incorrectQuestions));
+  localStorage.setItem("unattemptedQuestions",JSON.stringify(UnattemptedQuestions));
+  
 
   
   window.location.replace("/score.html");
