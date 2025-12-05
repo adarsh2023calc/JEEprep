@@ -6,9 +6,11 @@ from django.views.decorators.csrf import ensure_csrf_cookie,csrf_exempt
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import api_view
 
+
 from .models import QuizSettings
 from .serializers import QuizSettingsSerializer
 from .api_logic.ai import generate_questions
+from .api_logic.fetch import fetch_questions
 
 # -----------------------------
 # QUIZ SETTINGS LIST VIEW
@@ -86,10 +88,27 @@ from .executor import run_python
 def run_code(request):
     code = request.data.get("code", "")
     lang = request.data.get("language", "python")
+    args =  request.data.get("testcases", [])  # ["{...}", "{...}"]
 
     if lang == "python":
-        output = run_python(code)
+        output = run_python(code,args)
     else:
         return Response({"error": "Unsupported language"}, status=400)
 
     return Response({"output": output})
+
+@api_view(["POST"])
+
+def fetch_questions_boiler_plate(request):
+    number= request.data.get("num",2)
+    difficulty = request.data.get("difficulty","Medium")
+    company= request.data.get("company","TCS")
+
+    output = fetch_questions(number,difficulty,company)
+
+    return Response({"output": output})
+
+
+
+def render_questions_page(request):
+    return render(request,"coding_questions.html")

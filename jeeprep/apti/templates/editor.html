@@ -13,33 +13,29 @@
             font-family: Arial, sans-serif;
             background: #f5f7fa;
         }
-
         .container {
             display: grid;
-            grid-template-columns: 30% 45% 25%;
+            grid-template-columns: 20% 35% 45%;
             height: 100vh;
             overflow: hidden;
         }
-
         .panel {
             padding: 20px;
             overflow-y: auto;
             border-right: 1px solid #ddd;
         }
-
-        #editor-panel {
-            border-right: 1px solid #ddd;
-        }
-
         #editor {
-            height: 70vh;
+            height: 60vh;
+            width:auto;
             border: 1px solid #ccc;
         }
-
-        h2, h3 {
-            margin-top: 0;
+        pre {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            height: 200px;
+            overflow: auto;
         }
-
         button {
             background: #0d6efd;
             border: none;
@@ -48,111 +44,160 @@
             font-size: 15px;
             border-radius: 5px;
             cursor: pointer;
+            margin-top: 10px;
         }
-
-        button:hover {
-            background: #0a58ca;
-        }
-
-        .testcase-box {
-            margin: 10px 0;
-        }
-
-        .testcase-box textarea {
-            width: 100%;
-            height: 70px;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #bbb;
-            font-family: monospace;
-        }
-
-        pre {
-            background: #000;
-            color: #0f0;
-            padding: 15px;
-            height: 200px;
-            overflow: auto;
-        }
+        button:hover { background: #0a58ca; }
+        ul { padding-left: 20px; }
     </style>
 </head>
 <body>
 
 <div class="container">
 
-    <!-- LEFT PANEL: Problem Description -->
+    <!-- PROBLEM LIST PANEL -->
     <div class="panel">
-        <h2>Two Sum</h2>
-        <p>
-            Given an array of integers <b>nums</b> and an integer <b>target</b>, return indices of the two numbers
-            such that they add up to target.
-        </p>
-
-        <h3>Example</h3>
-        <pre>
-Input: nums = [2,7,11,15], target = 9
-Output: [0,1]
-        </pre>
-
-        <h3>Constraints</h3>
-        <ul>
-            <li>2 ≤ nums.length ≤ 10⁴</li>
-            <li>-10⁹ ≤ nums[i] ≤ 10⁹</li>
-            <li>-10⁹ ≤ target ≤ 10⁹</li>
-        </ul>
+        <h3>Problems</h3>
+        <ul id="problem-list"></ul>
     </div>
 
-    <!-- MIDDLE PANEL: Monaco Editor -->
-    <div class="panel" id="editor-panel">
+    <!-- PROBLEM DESCRIPTION -->
+    <div class="panel">
+        <h2 id="problem-title"></h2>
+        <p id="problem-description"></p>
+
+        <h3>Topics</h3>
+        <ul id="problem-topics"></ul>
+
+        <h3>Example</h3>
+        <pre id="problem-example"></pre>
+
+        <h3>Testcases</h3>
+        <ul id="problem-testcases"></ul>
+    </div>
+
+    <!-- EDITOR + TESTCASES -->
+    <div class="panel">
         <h3>Code Editor</h3>
         <div id="editor"></div>
 
-        <br>
         <button onclick="run()">Run</button>
-    </div>
 
-    <!-- RIGHT PANEL: Test Cases + Output -->
-    <div class="panel">
         <h3>Testcases</h3>
 
-        <div class="testcase-box">
-            <label>Input 1:</label>
-            <textarea id="testcase1">{"nums": [2,7,11,15], "target": 9}</textarea>
-        </div>
+        <label>Input 1:</label>
+        <textarea id="testcase1" style="width:100%;height:60px;"></textarea>
 
-        <div class="testcase-box p-2">
-            <label>Input 2:</label>
-            <textarea id="testcase2">{"nums": [3,2,4], "target": 6}</textarea>
-        </div>
+        <label>Input 2:</label>
+        <textarea id="testcase2" style="width:100%;height:60px;"></textarea>
 
-        <button onclick="run()">Run Testcases</button>
-
-        <h3 class="p-10">Output</h3>
+        <h3>Output</h3>
         <pre id="output"></pre>
     </div>
 
 </div>
 
 <script>
+/* -----------------------
+   Problem JSON (Your Data)
+------------------------ */
+let problemData = JSON.parse(localStorage.getItem("inner")).output;
+
+
+
+
+
+
+/* -----------------------
+   Inject Problem List
+------------------------ */
+function loadProblemList() {
+    const list = document.getElementById("problem-list");
+    list.innerHTML = "";
+
+    problemData.forEach((p, index) => {
+        const li = document.createElement("li");
+        li.style.cursor = "pointer";
+        li.style.marginBottom = "8px";
+        li.innerHTML = `<b>${p.title}</b> (${p.difficulty})`;
+        li.onclick = () => loadProblem(index);
+        list.appendChild(li);
+    });
+}
+
+/* -----------------------
+   Display Selected Problem
+------------------------ */
+function loadProblem(index) {
+    const p = problemData[index];
+
+    document.getElementById("problem-title").innerText = p.title;
+    document.getElementById("problem-description").innerHTML = p.description;
+
+    document.getElementById("problem-topics").innerHTML =
+        p.topics.map(t => `<li>${t}</li>`).join("");
+
+    document.getElementById("problem-example").innerText =
+        p.testcases[0].input + "\nOutput: " + p.testcases[0].output;
+
+    document.getElementById("problem-testcases").innerHTML =
+        p.testcases.map(tc =>
+            `<li><b>Input:</b> ${tc.input}<br><b>Output:</b> ${tc.output}</li>`
+        ).join("");
+
+    // Auto-fill testcases
+    if (p.testcases[0]) document.getElementById("testcase1").value = convertTest(p.testcases[0]);
+    if (p.testcases[1]) document.getElementById("testcase2").value = convertTest(p.testcases[1]);
+}
+
+/* Convert "nums = [2,7], target = 9" → {"nums":[2,7],"target":9} */
+function convertTest(tc) {
+    const obj = {};
+    tc.input.split(",").forEach(pair => {
+        let [k, v] = pair.split("=").map(s => s.trim());
+        try { obj[k] = JSON.parse(v); }
+        catch { obj[k] = v; }
+    });
+    return JSON.stringify(obj);
+}
+
+/* -----------------------
+   Monaco Editor Setup
+------------------------ */
 require.config({ paths: { "vs": "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs" }});
 
 require(["vs/editor/editor.main"], function () {
     window.editor = monaco.editor.create(document.getElementById('editor'), {
-        value: `def twoSum(nums, target):
-    map = {}
-    for i,n in enumerate(nums):
-        if target - n in map:
-            return [map[target-n], i]
-        map[n] = i`,
+        value: `import sys
+import json
+
+class Solution:
+    def twoSum(self, nums, target):
+        # USER IMPLEMENTATION
+        mp = {}
+        for i, n in enumerate(nums):
+            if target - n in mp:
+                return [mp[target - n], i]
+            mp[n] = i
+
+if __name__ == "__main__":
+    raw = [json.loads(arg) for arg in sys.argv[1:]]
+    sol = Solution()
+
+    for tc in raw:
+        output = sol.twoSum(tc["nums"], tc["target"])
+        print(output)`,
         language: "python",
         theme: "vs-dark"
     });
 });
 
+/* -----------------------
+   Run Button
+------------------------ */
 async function run() {
     const code = editor.getValue();
-    const test1 = document.getElementById("testcase1").value;
-    const test2 = document.getElementById("testcase2").value;
+    const t1 = document.getElementById("testcase1").value;
+    const t2 = document.getElementById("testcase2").value;
 
     const response = await fetch("/api/run/", {
         method: "POST",
@@ -160,13 +205,21 @@ async function run() {
         body: JSON.stringify({
             code: code,
             language: "python",
-            testcases: [test1, test2]
+            testcases: [t1, t2]
         })
     });
 
     const data = await response.json();
     document.getElementById("output").innerText = data.output;
 }
+
+/* -----------------------
+   On Page Load
+------------------------ */
+window.onload = function () {
+    loadProblemList();
+    loadProblem(0); // default load first problem
+};
 </script>
 
 </body>

@@ -18,7 +18,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from apti.views import main_backend_page,aptitude_quiz,software_quiz,verbals_quiz,\
-    assesment_quiz,score_view , leetcode_view,run_code
+    assesment_quiz,score_view , leetcode_view,run_code,render_questions_page,\
+        fetch_questions_boiler_plate
 from apti.views import (
     GenerateQuizView
 )
@@ -34,7 +35,9 @@ urlpatterns = [
     path("api/generate_quiz/", GenerateQuizView.as_view(), name="generate_quiz"),
     path("score.html",score_view),
     path("editor.html",leetcode_view),
-    path('api/run/', run_code)
+    path('api/run/', run_code),
+    path('api/get_questions/',fetch_questions_boiler_plate),
+    path('coding_questions.html',render_questions_page)
 ]
 
 
