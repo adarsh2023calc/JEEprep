@@ -1,8 +1,12 @@
-import google.generativeai as genai
+
 from django.conf import settings
 import json
+from groq import Groq
 
-genai.configure(api_key=settings.GEMINI_API_KEY)
+
+
+
+client = Groq(api_key=settings.GROQ_API_KEY)
 
 def generate_questions(topics, number, difficulty):
     selected_topics = [t for t, selected in topics.items() if selected]
@@ -31,22 +35,81 @@ def generate_questions(topics, number, difficulty):
     ]
     """
     
-    model = genai.GenerativeModel("gemini-2.0-flash")
-
-    response = model.generate_content(
-        prompt,
-        generation_config={"response_mime_type": "application/json"}
+    completion = client.chat.completions.create(
+    model="openai/gpt-oss-120b",
+    messages=[
+      {
+        "role": "user",
+        "content": prompt
+      }
+    ],
+    temperature=1,
+    max_completion_tokens=8192,
+    top_p=1,
+    stream=True,
+    stop=None
     )
 
-   
-    # ---- FIX: extract JSON response properly ----
-    try:
-        text = response.candidates[0].content.parts[0].text
 
-        return json.loads(text)
-
-
+    try:  
+      text =""
+      for chunk in completion:
+        text+= chunk.choices[0].delta.content or ""
+      return json.loads(text)
+        
     except Exception as e:
-        # Helpful debug print
-        print("Raw Gemini Response:", response)
-        raise ValueError(f"Failed to parse Gemini response: {e}")
+        
+       print("Raw LLM Response:\n", text)
+
+    # 1️⃣ Try regex first (cheap + fast)
+    try:
+        return extract_json_regex(text)
+    except Exception: 
+      try:
+          return ai_extract_json(text, llm_client)
+      except Exception as ai_error:
+          raise ValueError(
+              f"Failed to parse JSON.\nOriginal error: {e}\nAI error: {ai_error}"
+          )
+
+
+import json
+import re
+
+def extract_json_regex(text: str):
+    """
+    Fast fallback using regex (no AI call).
+    """
+    match = re.search(r'\{.*\}', text, re.DOTALL)
+    if match:
+        return json.loads(match.group())
+    raise ValueError("No JSON object found")
+
+
+
+def ai_extract_json(raw_text, llm_client):
+    """
+    Uses AI to extract ONLY valid JSON from messy text.
+    """
+    prompt = f"""
+You are a JSON extractor.
+
+Rules:
+- Extract ONLY valid JSON
+- Do NOT add explanations
+- Do NOT change keys or values
+- If multiple JSON objects exist, return the most complete one
+- Output MUST be pure JSON
+
+Text:
+{raw_text}
+"""
+
+    response = llm_client.chat.completions.create(
+        model="openai/gpt-oss-120b",  # or your Groq/Gemini model
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0
+    )
+
+    extracted = response.choices[0].message.content.strip()
+    return json.loads(extracted)

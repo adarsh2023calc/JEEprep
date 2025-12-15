@@ -1,14 +1,18 @@
-import google.generativeai as genai
+
+
 from django.conf import settings
 import json
+from groq import Groq
 
-genai.configure(api_key=settings.GEMINI_API_KEY)
+
+
+client = Groq(api_key=settings.GROQ_API_KEY)
 
 
 def fetch_questions(number, difficulty, company):
     """
     Fetch coding questions (title, difficulty, description, topics, company tag, testcases)
-    with strict JSON output.
+    with strict JSON output. ONLY JSON
     """
 
     prompt = f"""
@@ -18,6 +22,7 @@ def fetch_questions(number, difficulty, company):
     - Difficulty must be: {difficulty}
     - Company tag: {company}
     - Each question must include EXACTLY two testcases.
+   
     - Output ONLY valid JSON.
 
     JSON Format:
@@ -38,28 +43,61 @@ def fetch_questions(number, difficulty, company):
                 "output": "Expected output"
             }}
         ]
+        ,
+        boiler_plate_code: "code"
       }}
     ]
 
-    EXTRA RULES:
-    - Testcases must match the description and logic of the problem.
-    - No markdown. No text outside JSON.
-    - Ensure the JSON parses correctly.
+    IMPORTANT:
+    If the response contains ANY text outside the JSON object,
+    the response will be considered INVALID and rejected.
+
+        DO NOT explain.
+        DO NOT justify.
+        DO NOT add notes.
+        DO NOT add headings.
+        DO NOT add markdown.
+         - Should output boiler_plate_code with 
+      format: 
+      import sys
+      import json
+      class Solution:
+        def twoSum(self, nums, target):
+
+      if __name__ == "__main__":
+        raw = [json.loads(arg) for arg in sys.argv[1:]]
+        sol = Solution()
+
+        for tc in raw:
+            output = sol.twoSum(tc["nums"], tc["target"])
+            print(output)
+
+        Return ONLY a single valid JSON object.
     """
 
-    model = genai.GenerativeModel("gemini-2.0-flash")
-
-    response = model.generate_content(
-        prompt,
-        generation_config={"response_mime_type": "application/json"}
+    completion = client.chat.completions.create(
+    model="openai/gpt-oss-120b",
+    messages=[
+      {
+        "role": "user",
+        "content": prompt
+      }
+    ],
+    temperature=1,
+    max_completion_tokens=8192,
+    top_p=1,
+    stream=True,
+    stop=None
     )
 
+
     try:
-        raw = response.candidates[0].content.parts[0].text
-        return json.loads(raw)
+      text =""
+      for chunk in completion:
+        text+= chunk.choices[0].delta.content or ""
+      return json.loads(text)
+      
 
     except Exception as e:
-        print("---- Gemini Raw Response ----")
-        print(response)
-        print("-----------------------------")
-        raise ValueError(f"Failed to parse JSON from Gemini: {e}")
+        print("Raw Groq Response:", text)
+        raise ValueError(f"Failed to parse Groq response: {e}")

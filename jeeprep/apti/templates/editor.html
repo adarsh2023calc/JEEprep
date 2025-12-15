@@ -132,7 +132,10 @@ function loadProblem(index) {
 
     document.getElementById("problem-title").innerText = p.title;
     document.getElementById("problem-description").innerHTML = p.description;
+    
+    const model = window.editor;
 
+    model.setValue(p.boiler_plate_code);
     document.getElementById("problem-topics").innerHTML =
         p.topics.map(t => `<li>${t}</li>`).join("");
 
@@ -167,17 +170,11 @@ require.config({ paths: { "vs": "https://cdnjs.cloudflare.com/ajax/libs/monaco-e
 
 require(["vs/editor/editor.main"], function () {
     window.editor = monaco.editor.create(document.getElementById('editor'), {
-        value: `import sys
+        value: `
+import sys
 import json
-
 class Solution:
     def twoSum(self, nums, target):
-        # USER IMPLEMENTATION
-        mp = {}
-        for i, n in enumerate(nums):
-            if target - n in mp:
-                return [mp[target - n], i]
-            mp[n] = i
 
 if __name__ == "__main__":
     raw = [json.loads(arg) for arg in sys.argv[1:]]
