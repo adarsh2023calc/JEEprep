@@ -4,8 +4,6 @@ import json
 from groq import Groq
 
 
-
-
 client = Groq(api_key=settings.GROQ_API_KEY)
 
 def generate_questions(topics, number, difficulty):
@@ -88,25 +86,23 @@ def extract_json_regex(text: str):
 
 
 def ai_extract_json(raw_text, llm_client):
-    """
-    Uses AI to extract ONLY valid JSON from messy text.
-    """
+    
     prompt = f"""
-You are a JSON extractor.
+      You are a JSON extractor.
 
-Rules:
-- Extract ONLY valid JSON
-- Do NOT add explanations
-- Do NOT change keys or values
-- If multiple JSON objects exist, return the most complete one
-- Output MUST be pure JSON
+      Rules:
+      - Extract ONLY valid JSON
+      - Do NOT add explanations
+      - Do NOT change keys or values
+      - If multiple JSON objects exist, return the most complete one
+      - Output MUST be pure JSON
 
-Text:
-{raw_text}
-"""
+      Text:
+      {raw_text}
+      """
 
     response = llm_client.chat.completions.create(
-        model="openai/gpt-oss-120b",  # or your Groq/Gemini model
+        model="openai/gpt-oss-120b", 
         messages=[{"role": "user", "content": prompt}],
         temperature=0
     )

@@ -62,6 +62,7 @@
 
     <!-- PROBLEM DESCRIPTION -->
     <div class="panel">
+        
         <h2 id="problem-title"></h2>
         <p id="problem-description"></p>
 
@@ -102,8 +103,9 @@
 ------------------------ */
 let problemData = JSON.parse(localStorage.getItem("inner")).output;
 
+let CurrentProblem =0;
 
-
+let CodingAnswers={}
 
 
 
@@ -120,6 +122,7 @@ function loadProblemList() {
         li.style.marginBottom = "8px";
         li.innerHTML = `<b>${p.title}</b> (${p.difficulty})`;
         li.onclick = () => loadProblem(index);
+        
         list.appendChild(li);
     });
 }
@@ -127,15 +130,31 @@ function loadProblemList() {
 /* -----------------------
    Display Selected Problem
 ------------------------ */
-function loadProblem(index) {
-    const p = problemData[index];
 
+function loadProblem(index) {
+    if(window.editor){
+        CodingAnswers[CurrentProblem]=window.editor.getValue();
+    }
+    const p = problemData[index];
+    CurrentProblem =index;
+    
     document.getElementById("problem-title").innerText = p.title;
     document.getElementById("problem-description").innerHTML = p.description;
     
     const model = window.editor;
 
-    model.setValue(p.boiler_plate_code);
+    if (index in CodingAnswers){
+        model.setValue(CodingAnswers[index]);
+    }
+    
+
+    else{
+        CodingAnswers[index]= p.boiler_plate_code;
+        model.setValue(p.boiler_plate_code);
+    }
+
+
+    
     document.getElementById("problem-topics").innerHTML =
         p.topics.map(t => `<li>${t}</li>`).join("");
 
@@ -146,16 +165,28 @@ function loadProblem(index) {
         p.testcases.map(tc =>
             `<li><b>Input:</b> ${tc.input}<br><b>Output:</b> ${tc.output}</li>`
         ).join("");
+    
+    
 
     // Auto-fill testcases
     if (p.testcases[0]) document.getElementById("testcase1").value = convertTest(p.testcases[0]);
     if (p.testcases[1]) document.getElementById("testcase2").value = convertTest(p.testcases[1]);
 }
 
+
+
+
 /* Convert "nums = [2,7], target = 9" → {"nums":[2,7],"target":9} */
+
+/* TO-DO:  Convert nested arrays*/
 function convertTest(tc) {
     const obj = {};
-    tc.input.split(",").forEach(pair => {
+
+    /* Do not change the pair.split(", ") Testcases will become wrong. Most of us by basic
+    inuition might use "," but that is insufficient to do so  
+    */
+   
+    tc.input.split(", ").forEach(pair => {
         let [k, v] = pair.split("=").map(s => s.trim());
         try { obj[k] = JSON.parse(v); }
         catch { obj[k] = v; }
@@ -186,6 +217,7 @@ if __name__ == "__main__":
         language: "python",
         theme: "vs-dark"
     });
+    loadProblem(0);
 });
 
 /* -----------------------
@@ -207,6 +239,7 @@ async function run() {
     });
 
     const data = await response.json();
+
     document.getElementById("output").innerText = data.output;
 }
 
@@ -215,7 +248,7 @@ async function run() {
 ------------------------ */
 window.onload = function () {
     loadProblemList();
-    loadProblem(0); // default load first problem
+    
 };
 </script>
 
