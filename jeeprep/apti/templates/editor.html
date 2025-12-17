@@ -125,6 +125,12 @@
             <option value="vs">Light</option>
             <option value="vs-dark">Dark</option>
             <option value="hc-black">High Contrast</option>
+
+            <option value="dracula">Dracula</option>
+            <option value="monokai">Monokai</option>
+            <option value="solarized-dark">Solarized Dark</option>
+            <option value="one-dark">One Dark</option>
+            <option value="github-dark">GitHub Dark</option>
         </select>
         <h3>Code Editor</h3>
         <div id="editor"></div>
@@ -174,6 +180,8 @@ function loadProblemList() {
         list.appendChild(li);
     });
 }
+
+
 
 /* -----------------------
    Display Selected Problem
@@ -266,11 +274,38 @@ if __name__ == "__main__":
         theme: "vs-dark"
     });
     loadProblem(0);
+
+    monaco.editor.defineTheme("dracula", {
+    base: "vs-dark",
+    inherit: true,
+    rules: [
+        { token: "comment", foreground: "6272a4" },
+        { token: "string", foreground: "f1fa8c" },
+        { token: "keyword", foreground: "ff79c6" }
+    ],
+    colors: {
+        "editor.background": "#282a36"
+    }
+});
+
+monaco.editor.defineTheme("monokai", {
+    base: "vs-dark",
+    inherit: true,
+    rules: [
+        { token: "comment", foreground: "75715E" },
+        { token: "string", foreground: "E6DB74" },
+        { token: "keyword", foreground: "F92672" }
+    ],
+    colors: {
+        "editor.background": "#272822"
+    }
+});
 });
 
 
+
 document.getElementById("theme").addEventListener("change", (e) => {
-    console.log(e.target.value);
+    
     monaco.editor.setTheme(e.target.value);
 })
 /* -----------------------
