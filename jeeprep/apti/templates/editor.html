@@ -48,14 +48,56 @@
         }
         button:hover { background: #0a58ca; }
         ul { padding-left: 20px; }
+
+
+        label[for="theme"] {
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+    margin-right: 8px;
+}
+
+#theme {
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+}
+
+#theme:hover {
+    border-color: #007bff;
+}
+
+        #theme:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+        }
+
+        /* Dark page support */
+        body.dark label[for="theme"] {
+            color: #ccc;
+        }
+
+        body.dark #theme {
+            background-color: #1e1e1e;
+            color: #eee;
+            border-color: #444;
+        }
+
     </style>
 </head>
 <body>
 
 <div class="container">
 
+    
     <!-- PROBLEM LIST PANEL -->
     <div class="panel">
+        
         <h3>Problems</h3>
         <ul id="problem-list"></ul>
     </div>
@@ -78,6 +120,12 @@
 
     <!-- EDITOR + TESTCASES -->
     <div class="panel">
+        <label for="theme"">Theme</label>
+        <select id="theme">
+            <option value="vs">Light</option>
+            <option value="vs-dark">Dark</option>
+            <option value="hc-black">High Contrast</option>
+        </select>
         <h3>Code Editor</h3>
         <div id="editor"></div>
 
@@ -220,6 +268,11 @@ if __name__ == "__main__":
     loadProblem(0);
 });
 
+
+document.getElementById("theme").addEventListener("change", (e) => {
+    console.log(e.target.value);
+    monaco.editor.setTheme(e.target.value);
+})
 /* -----------------------
    Run Button
 ------------------------ */
