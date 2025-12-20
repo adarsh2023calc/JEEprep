@@ -55,9 +55,11 @@
     font-weight: 600;
     color: #444;
     margin-right: 8px;
-}
+      }
 
-#theme {
+      
+
+#theme,#lang {
     padding: 6px 12px;
     font-size: 14px;
     border-radius: 6px;
@@ -68,7 +70,7 @@
     outline: none;
 }
 
-#theme:hover {
+#theme:hover,#lang:hover {
     border-color: #007bff;
 }
 
@@ -121,6 +123,7 @@
     <!-- EDITOR + TESTCASES -->
     <div class="panel">
         <label for="theme"">Theme</label>
+
         <select id="theme">
             <option value="vs">Light</option>
             <option value="vs-dark">Dark</option>
@@ -131,6 +134,14 @@
             <option value="solarized-dark">Solarized Dark</option>
             <option value="one-dark">One Dark</option>
             <option value="github-dark">GitHub Dark</option>
+        </select>
+
+        <label for ="language">Language</label>
+        <select id="lang">
+            <option value="python">Python</option>
+            <option value="java">Java</option>
+            <option value="c++">C++</option>
+            <option value="javascript"></option>
         </select>
         <h3>Code Editor</h3>
         <div id="editor"></div>
