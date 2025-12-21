@@ -113,3 +113,9 @@ def fetch_questions_boiler_plate(request):
 
 def render_questions_page(request):
     return render(request,"coding_questions.html")
+
+
+
+def render_landing_page(request):
+    return render(request,"landing_page.html")
+
