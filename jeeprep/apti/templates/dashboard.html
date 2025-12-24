@@ -1,0 +1,116 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard UI</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/style2.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+
+<div class="main-frame">
+    <div class="dashboard">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="logo">Ajinkya</h2>
+
+            <ul class="menu">
+                <li class="active">Dashboard</li>
+                <li>Content</li>
+                <li>Analytics</li>
+                <li>Likes</li>
+                <li>Comments</li>
+                <li>Share</li>
+            </ul>
+
+            <div class="bottom">
+                <p>Logout</p>
+                <div class="dark-mode">
+                    <span>Dark Mode</span>
+                    <input type="checkbox">
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <input type="text" placeholder="Search here...">
+                <img src="https://i.pravatar.cc/40" class="avatar">
+            </div>
+
+            <h1>Dashboard</h1>
+
+            <!-- Stats Cards -->
+            <div class="cards">
+                <div class="card blue">
+                    <h3>Total Likes</h3>
+                    <p>50,120</p>
+                </div>
+
+                <div class="card yellow">
+                    <h3>Comments</h3>
+                    <p>25,120</p>
+                </div>
+
+                <div class="card purple">
+                    <h3>Total Share</h3>
+                    <p>10,320</p>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <section class="table-section">
+                <h2>Recent Activity</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Joined</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Prem Shahi</td>
+                            <td>premshahi@gmail.com</td>
+                            <td>2022-02-12</td>
+                            <td>New</td>
+                            <td>Liked</td>
+                        </tr>
+                        <tr>
+                            <td>Deepa Chand</td>
+                            <td>deepachand@gmail.com</td>
+                            <td>2022-02-12</td>
+                            <td>Member</td>
+                            <td>Shared</td>
+                        </tr>
+                        <tr>
+                            <td>Prakash Shahi</td>
+                            <td>prakashshi@gmail.com</td>
+                            <td>2022-02-13</td>
+                            <td>New</td>
+                            <td>Liked</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+</body>
+</html>

@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path
 from apti.views import main_backend_page,aptitude_quiz,software_quiz,verbals_quiz,\
     assesment_quiz,score_view , leetcode_view,run_code,render_questions_page,\
-        fetch_questions_boiler_plate,render_landing_page
+        fetch_questions_boiler_plate,render_landing_page,render_dashboard
 from apti.views import (
     GenerateQuizView
 )
@@ -38,8 +38,8 @@ urlpatterns = [
     path("editor.html",leetcode_view),
     path('api/run/', run_code),
     path('api/get_questions/',fetch_questions_boiler_plate),
-    path('coding_questions.html',render_questions_page)
-
+    path('coding_questions.html',render_questions_page),
+    path('dashboard.html',render_dashboard)
 ]
 
 

@@ -119,3 +119,7 @@ def render_questions_page(request):
 def render_landing_page(request):
     return render(request,"landing_page.html")
 
+
+
+def render_dashboard(request):
+    return render(request,"dashboard.html")
