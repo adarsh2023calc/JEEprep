@@ -22,10 +22,33 @@
             <h2 class="logo">Ajinkya</h2>
 
             <ul class="menu">
-                <li class="active">Dashboard</li>
-                <li>Content</li>
-                <li>Analytics</li>
+                <li id="dashboard" onclick="ChangeActiveClass('dashboard');"class="active">Dashboard</li>
+                <li id="content" onclick="ChangeActiveClass('content');" >Content</li>
+                <li id="analytics" onclick="ChangeActiveClass('analytics');">Analytics</li>
             </ul>
+
+            <script>
+
+                function ChangeActiveClass(listID){
+                    document.getElementById(listID).className ="active";
+                    var bool1 = listID === "dashboard" 
+                    var bool2 = listID ==="content";
+                    var bool3 = listID === "analytics";
+
+                    if (! bool1){
+                        document.getElementById("dashboard").className ="";
+                    }
+
+                    if (! bool2){
+                        document.getElementById("content").className ="";
+                    }
+
+                    if (! bool3){
+                        document.getElementById("analytics").className ="";
+                    }
+
+                }
+            </script>
 
             <div class="bottom">
                 <p>Logout</p>
@@ -45,7 +68,7 @@
                 <img src="https://i.pravatar.cc/40" class="avatar">
             </div>
 
-            <h1>Dashboard</h1>
+            
 
             <!-- Stats Cards -->
             <div class="cards">
