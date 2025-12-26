@@ -64,7 +64,7 @@ def generate_questions(topics, number, difficulty):
         return extract_json_regex(text)
     except Exception: 
       try:
-          return ai_extract_json(text, llm_client)
+          return ai_extract_json(text, client)
       except Exception as ai_error:
           raise ValueError(
               f"Failed to parse JSON.\nOriginal error: {e}\nAI error: {ai_error}"
@@ -85,7 +85,7 @@ def extract_json_regex(text: str):
 
 
 
-def ai_extract_json(raw_text, llm_client):
+def ai_extract_json(raw_text, client):
     
     prompt = f"""
       You are a JSON extractor.
@@ -101,7 +101,7 @@ def ai_extract_json(raw_text, llm_client):
       {raw_text}
       """
 
-    response = llm_client.chat.completions.create(
+    response = client.chat.completions.create(
         model="openai/gpt-oss-120b", 
         messages=[{"role": "user", "content": prompt}],
         temperature=0

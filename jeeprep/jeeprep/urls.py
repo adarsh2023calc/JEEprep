@@ -19,7 +19,8 @@ from django.contrib import admin
 from django.urls import path
 from apti.views import main_backend_page,aptitude_quiz,software_quiz,verbals_quiz,\
     assesment_quiz,score_view , leetcode_view,run_code,render_questions_page,\
-        fetch_questions_boiler_plate,render_landing_page,render_dashboard
+        fetch_questions_boiler_plate,render_landing_page,render_dashboard,login_view,logout_view,\
+       signup_view
 from apti.views import (
     GenerateQuizView
 )
@@ -27,7 +28,7 @@ from apti.views import (
 
 
 urlpatterns = [
-    path("",render_landing_page),
+    path("",render_landing_page,name="landing"),
     path("index.html", main_backend_page),
     path("aptitude_quiz.html", aptitude_quiz),
     path("software_quiz.html",software_quiz),
@@ -39,7 +40,10 @@ urlpatterns = [
     path('api/run/', run_code),
     path('api/get_questions/',fetch_questions_boiler_plate),
     path('coding_questions.html',render_questions_page),
-    path('dashboard.html',render_dashboard)
+    path('dashboard.html',render_dashboard,name="dashboard"),
+    path('signup',signup_view,name="signup"),
+    path('logout',logout_view,name="logout"),
+    path('login',login_view,name="login")
 ]
 
 

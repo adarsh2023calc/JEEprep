@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.views.decorators.csrf import ensure_csrf_cookie,csrf_exempt
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import api_view
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
 
 from .models import QuizSettings
@@ -115,7 +118,7 @@ def render_questions_page(request):
     return render(request,"coding_questions.html")
 
 
-
+@ensure_csrf_cookie
 def render_landing_page(request):
     return render(request,"landing_page.html")
 
@@ -123,3 +126,59 @@ def render_landing_page(request):
 
 def render_dashboard(request):
     return render(request,"dashboard.html")
+
+
+
+def login_view(request):
+
+    if request.method=="POST":
+        userName = request.POST['username']
+        passWord = request.POST['password']
+    
+        user = authenticate(request,username=userName,password=passWord)
+
+        if user:
+            login(request,user)
+            return redirect("dashboard")
+        
+
+        else:
+            messages.error(request,"invalid_credentials")
+            return redirect("/")
+        
+    return redirect("/")
+    
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')
+
+    
+
+
+
+def signup_view(request):
+    if request.method=="POST":
+        userName = request.POST.get('username')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+
+        if password1 != password2:
+            messages.error(request,"Passwords do not match")
+
+        if User.objects.filter(username=userName).exists():
+            messages.error(request, "Username already exists")
+
+            return render_dashboard(request)
+        
+
+        user = User.objects.create_user(username=userName,email=email,password=password1)
+        user.save()
+        messages.success(request,"Message saved successfully")
+
+        return render_dashboard(request)
+    
+    return render(request,'landing_page.html')

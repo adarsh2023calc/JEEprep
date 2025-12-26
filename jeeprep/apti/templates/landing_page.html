@@ -6,18 +6,142 @@
     <title>Jeeprep | AI Placement Prep</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function getCookie(name) {
+      let cookieValue = null;
+      const cookies = document.cookie.split(";");
+
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        }
+      }
+      return cookieValue;
+    }
+
+    const csrftoken = getCookie("csrftoken");
+    </script>
+    
 </head>
 <body>
+
+
+
+
 
 <!-- NAVBAR -->
 <nav class="navbar">
     <div class="logo">Jeeprep</div>
     <ul class="nav-links">
+
+        
         <li><a href="#about">About</a></li>
         <li><a href="#ai">AI System</a></li>
         <li><a href="#footer">Contact</a></li>
+        
+        {% if user.is_authenticated %}
+            <li>
+                <a href="{% url 'dashboard' %}" class="text-blue-600 font-semibold">
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}" class="text-red-500">
+                    Logout
+                </a>
+            </li>
+        {% else %}
+            <li>
+                <button onclick="openLogin()" class="text-blue-600 font-semibold">Login</button>
+            </li>
+            <li>
+                <button onclick="openSignup()" class="text-blue-600 font-semibold">Signup</button>
+            </li>
+        {% endif %}
     </ul>
+
+
 </nav>
+
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center z-50">
+  <div class="bg-white p-6 rounded-xl w-96 relative">
+    
+    <button onclick="closeLogin()" class="absolute top-2 right-3 text-xl">&times;</button>
+    <h2 class="text-2xl font-bold mb-4 text-center">Login</h2>
+
+    {% if messages %}
+        <div class="fixed top-5 right-5 space-y-3 z-50">
+            {% for message in messages %}
+            <div class="px-5 py-3 rounded-xl shadow-lg
+                {% if message.tags == 'error' %} bg-red-500 {% endif %}
+                {% if message.tags == 'success' %} bg-green-500 {% endif %}
+                text-white">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'login' %}">
+       {% csrf_token %}
+      <input type="text" name="username" placeholder="Username"
+             class="w-full mb-3 px-4 py-2 border rounded-lg" required>
+
+      <input type="password" name="password" placeholder="Password"
+             class="w-full mb-4 px-4 py-2 border rounded-lg" required>
+
+      <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+        Login
+      </button>
+    </form>
+  </div>
+</div>
+
+
+<!-- SIGNUP MODAL -->
+<div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center z-50">
+  <div class="bg-white p-6 rounded-xl w-96 relative">
+
+    <button onclick="closeSignup()" class="absolute top-2 right-3 text-xl">&times;</button>
+    <h2 class="text-2xl font-bold mb-4 text-center">Create Account</h2>
+
+    {% if messages %}
+        <div class="fixed top-5 right-5 space-y-3 z-50">
+            {% for message in messages %}
+            <div class="px-5 py-3 rounded-xl shadow-lg
+                {% if message.tags == 'error' %} bg-red-500 {% endif %}
+                {% if message.tags == 'success' %} bg-green-500 {% endif %}
+                text-white">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'signup' %}">
+      {% csrf_token %}
+      <input type="text" name="username" placeholder="Username"
+             class="w-full mb-3 px-4 py-2 border rounded-lg" required>
+
+      <input type="email" name="email" placeholder="Email"
+             class="w-full mb-3 px-4 py-2 border rounded-lg" required>
+
+      <input type="password" name="password1" placeholder="Password"
+             class="w-full mb-3 px-4 py-2 border rounded-lg" required>
+
+      <input type="password" name="password2" placeholder="Confirm Password"
+             class="w-full mb-4 px-4 py-2 border rounded-lg" required>
+
+      <button class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
+        Signup
+      </button>
+    </form>
+  </div>
+</div>
+
 
 <!-- HERO SECTION -->
 <section class="hero">
@@ -49,6 +173,8 @@
         Click here to access
         </a>
 
+        
+
         <a href="dashboard.html"
         class="inline-block px-5 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 no-underline">
         Click here to access dashboard
@@ -62,10 +188,31 @@
 <footer id="footer">
     <p>Built by <strong>Adarsh Sudheer</strong></p>
     <p>
-        <a href="https://github.com/adarsh2023calc" target="_blank">GitHub</a> |
+        <a href="https://github.com/adarsh2023calc" target="_blank">GitHub</a> 
         <a href="#" target="_blank">Resume</a>
     </p>
 </footer>
+
+<script>
+  
+  function openLogin(){
+        document.getElementById("loginModal").classList.remove("hidden");
+
+    }
+    function closeLogin(){
+        document.getElementById("loginModal").classList.add("hidden");
+
+    }
+
+        function openSignup() {
+    document.getElementById("signupModal").classList.remove("hidden");
+    }
+    function closeSignup() {
+    document.getElementById("signupModal").classList.add("hidden");
+    }
+</script>
+
+
 
 </body>
 </html>

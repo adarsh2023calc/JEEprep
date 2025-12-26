@@ -14,6 +14,7 @@
 </head>
 <body>
 
+
 <div class="main-frame">
     <div class="dashboard">
 
@@ -25,6 +26,7 @@
                 <li id="dashboard" onclick="ChangeActiveClass('dashboard');"class="active">Dashboard</li>
                 <li id="content" onclick="ChangeActiveClass('content');" >Content</li>
                 <li id="analytics" onclick="ChangeActiveClass('analytics');">Analytics</li>
+                
             </ul>
 
             <script>
@@ -73,18 +75,18 @@
             <!-- Stats Cards -->
             <div class="cards">
                 <div class="card blue">
-                    <h3>Total Likes</h3>
-                    <p>50,120</p>
+                    <h3>Aptitude Overall Accuracy</h3>
+                    <p id="aptitude-score"></p>
                 </div>
 
                 <div class="card yellow">
-                    <h3>Comments</h3>
-                    <p>25,120</p>
+                    <h3>Verbals Overall Accuracy</h3>
+                    <p id="verbals-score"></p>
                 </div>
 
                 <div class="card purple">
-                    <h3>Total Share</h3>
-                    <p>10,320</p>
+                    <h3>Software Topics</h3>
+                    <p id="software-score"></p>
                 </div>
             </div>
 
@@ -94,36 +96,7 @@
 
                 <table>
                     <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Joined</th>
-                            <th>Type</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Prem Shahi</td>
-                            <td>premshahi@gmail.com</td>
-                            <td>2022-02-12</td>
-                            <td>New</td>
-                            <td>Liked</td>
-                        </tr>
-                        <tr>
-                            <td>Deepa Chand</td>
-                            <td>deepachand@gmail.com</td>
-                            <td>2022-02-12</td>
-                            <td>Member</td>
-                            <td>Shared</td>
-                        </tr>
-                        <tr>
-                            <td>Prakash Shahi</td>
-                            <td>prakashshi@gmail.com</td>
-                            <td>2022-02-13</td>
-                            <td>New</td>
-                            <td>Liked</td>
-                        </tr>
+                        <tr></tr>
                     </tbody>
                 </table>
             </section>
@@ -132,5 +105,9 @@
     </div>
 </div>
 
+
+<script>
+    ChangeActiveClass('dashboard');
+</script>
 </body>
 </html>
