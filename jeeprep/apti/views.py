@@ -146,7 +146,7 @@ def login_view(request):
             messages.error(request,"invalid_credentials")
             return redirect("/")
         
-    return redirect("/")
+    return redirect("/?showLogin=true")
     
 
 

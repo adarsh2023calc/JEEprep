@@ -181,11 +181,12 @@
         const raw = await response.text();
         
         const result = JSON.parse(raw);
-
         localStorage.setItem("quiz_data",JSON.stringify(result));
         localStorage.setItem("time",time);
         // redirect only after success
         window.location.href = "/assesment.html";
+
+        
 
       } catch (err) {
         console.error("Quiz Generation Error:", err);

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,7 @@
 <title>Generate Coding Questions</title>
 
 <script>
+    import { MongoClient } from "mongodb"
     function getCookie(name) {
       let cookieValue = null;
       const cookies = document.cookie.split(";");
@@ -96,14 +98,15 @@
     </select>
 
     <button onclick="getQuestions()">Get Questions</button>
-
     <pre id="output" style="margin-top:20px; white-space:pre-wrap;"></pre>
 
-    
 
 </div>
 
 <script>
+
+
+
 async function getQuestions() {
     const num = document.getElementById("num").value;
     const difficulty = document.getElementById("difficulty").value;
@@ -115,7 +118,7 @@ async function getQuestions() {
     }
 
 
-    
+    document.getElementById("loadingOverlay").classList.remove("hidden");
     const response = await fetch("/api/get_questions/", {
         method: "POST",
         headers: { "Content-Type": "application/json" ,
@@ -131,8 +134,15 @@ async function getQuestions() {
 
 
     const data = await response.json();
-    localStorage.setItem("inner",JSON.stringify(data));
+    const json_data = JSON.stringify(data);
+    localStorage.setItem("inner",json_data);
+
+    StoreData(json_data);
+    
+
+
     window.location.href ="/editor.html";
+
 
 
 }
@@ -140,7 +150,9 @@ async function getQuestions() {
 
 
 <!-- Full-screen loading overlay -->
-
+<div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="animate-spin h-16 w-16 border-4 border-white border-t-transparent rounded-full"></div>
+</div>
 
 
 </body>
