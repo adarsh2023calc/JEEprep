@@ -25,9 +25,15 @@ Practice makes you perfect. Lets help you with AI
 
 
 
-![Jeeprep Landing Page](image.png)
+![Jeeprep Landing Page](assets/image.png)
 
-# Tech Stack
+![Jeeprep Quiz Prompt](assets/QuizPage.png)
+
+
+![Jeeprep AI generated prompt](assets/CodingPallete.png)
+
+
+### Tech Stack
 
 | Layer          | Technology                                   |
 | -------------- | -------------------------------------------- |
@@ -35,6 +41,8 @@ Practice makes you perfect. Lets help you with AI
 | Frontend       | HTML, Tailwind CSS                           |
 | Database       | SQLite (default, for development)            |
 | Authentication | Django built-in Authentication (Auth tables) |
+
+
 
 
 # Setup Instructions

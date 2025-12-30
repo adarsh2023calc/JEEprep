@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <title>Online Judge - LeetCode Style</title>
 
+    <script>
+        function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+    </script>
     <!-- Monaco -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs/loader.min.js"></script>
 
@@ -311,7 +327,59 @@ monaco.editor.defineTheme("monokai", {
         "editor.background": "#272822"
     }
 });
+
+
+monaco.editor.defineTheme("solarized-dark", {
+    base: "vs-dark",
+    inherit: true,
+
+    rules: [
+        { token: "comment", foreground: "586E75", fontStyle: "italic" },
+        { token: "string", foreground: "2AA198" },
+        { token: "keyword", foreground: "859900", fontStyle: "bold" },
+        { token: "number", foreground: "D33682" },
+        { token: "type", foreground: "B58900" },
+        { token: "function", foreground: "268BD2" },
+        { token: "variable", foreground: "93A1A1" },
+        { token: "constant", foreground: "CB4B16" }
+    ],
+
+    colors: {
+        // Editor
+        "editor.background": "#002B36",
+        "editor.foreground": "#839496",
+        "editorCursor.foreground": "#93A1A1",
+        "editor.lineHighlightBackground": "#073642",
+        "editor.selectionBackground": "#073642",
+        "editor.inactiveSelectionBackground": "#07364299",
+
+        // Gutter
+        "editorLineNumber.foreground": "#586E75",
+        "editorLineNumber.activeForeground": "#839496",
+
+        // Indentation & whitespace
+        "editorIndentGuide.background": "#073642",
+        "editorIndentGuide.activeBackground": "#586E75",
+
+        // Brackets
+        "editorBracketMatch.background": "#073642",
+        "editorBracketMatch.border": "#268BD2",
+
+        // Find / highlight
+        "editor.findMatchBackground": "#586E75",
+        "editor.findMatchHighlightBackground": "#073642",
+
+        // Suggest / hover
+        "editorHoverWidget.background": "#073642",
+        "editorSuggestWidget.background": "#073642",
+        "editorSuggestWidget.border": "#586E75",
+        "editorSuggestWidget.selectedBackground": "#586E75"
+    }
 });
+
+});
+
+
 
 
 
@@ -327,15 +395,22 @@ async function run() {
     const t1 = document.getElementById("testcase1").value;
     const t2 = document.getElementById("testcase2").value;
 
+    console.log(t1);
+    console.log(t2);
     const response = await fetch("/api/run/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken"),
+
+         },
         body: JSON.stringify({
             code: code,
             language: "python",
             testcases: [t1, t2]
         })
     });
+    
 
     const data = await response.json();
 

@@ -6,7 +6,7 @@
 <title>Generate Coding Questions</title>
 
 <script>
-    import { MongoClient } from "mongodb"
+    
     function getCookie(name) {
       let cookieValue = null;
       const cookies = document.cookie.split(";");
@@ -137,7 +137,6 @@ async function getQuestions() {
     const json_data = JSON.stringify(data);
     localStorage.setItem("inner",json_data);
 
-    StoreData(json_data);
     
 
 
