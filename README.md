@@ -32,8 +32,14 @@ Practice makes you perfect. Lets help you with AI
 
 ![Jeeprep AI generated prompt](assets/CodingPallete.png)
 
+![Jeeprep Aptitude quiz report](assets/Assesment.png)
 
-### Tech Stack
+
+![Jeeprep Aptitude quiz report](assets/Score.png)
+
+
+
+# Tech Stack
 
 | Layer          | Technology                                   |
 | -------------- | -------------------------------------------- |
