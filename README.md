@@ -4,26 +4,28 @@ JEEPREP is a Django-based web application designed to help students prepare for 
 Practice makes you perfect. Lets help you with AI
 
 
-# Project Structure
+### Project Structure
 
-JEEPREP/
-│
+
+```text
+.JEEPREP/
 ├── env/                    # Python virtual environment
 │
 ├── jeeprep/                # Main project folder
-│   ├── apti/               # Application (aptitude / core logic)
-│   ├── jeeprep/            # Django project settings
+│   ├── apti/               # Aptitude module / core business logic
+│   ├── jeeprep/            # Django project settings and configuration
 │
 ├── .env                    # Environment variables
 ├── bashscript.sh           # Helper script (setup / run tasks)
-├── db.sqlite3              # SQLite database
+├── db.sqlite3              # SQLite database (default)
 ├── manage.py               # Django management script
 ├── .gitignore              # Git ignored files
 └── README.md               # Project documentation
+```
 
 
 
-![Jeeprep Landing Page](assets/image.png)
+![Jeeprep Landing Page](image.png)
 
 # Tech Stack
 
@@ -40,8 +42,10 @@ JEEPREP/
 
 Clone the Repository
 
-code `git clone https://github.com/your-username/jeeprep.git
-cd jeeprep`
+
+```text
+git clone https://github.com/your-username/jeeprep.git
+cd jeeprep
 
 
 
@@ -53,5 +57,9 @@ source env/bin/activate
 
 # Windows
 env\Scripts\activate
+
+```
+
+# 
 
 
