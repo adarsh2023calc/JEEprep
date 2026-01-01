@@ -14,6 +14,7 @@ from .models import QuizSettings
 from .serializers import QuizSettingsSerializer
 from .api_logic.ai import generate_questions
 from .api_logic.fetch import fetch_questions
+from .api_logic.db import save_to_bigquery
 
 # -----------------------------
 # QUIZ SETTINGS LIST VIEW
@@ -190,7 +191,10 @@ def signup_view(request):
 
 @api_view(["POST"])
 def save_assesment_details(request):
-    
+    user_id=request.get("user_id")
+    assesment_id = request.get("assesment_id")
+    data = request.get("body")
+    save_to_bigquery(user_id,assesment_id,data)
     pass
 
 @api_view(["POST"])

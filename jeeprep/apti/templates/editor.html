@@ -394,9 +394,6 @@ async function run() {
     const code = editor.getValue();
     const t1 = document.getElementById("testcase1").value;
     const t2 = document.getElementById("testcase2").value;
-
-    console.log(t1);
-    console.log(t2);
     const response = await fetch("/api/run/", {
         method: "POST",
         headers: { 
