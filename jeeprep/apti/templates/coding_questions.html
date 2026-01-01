@@ -118,6 +118,7 @@ async function getQuestions() {
     }
 
 
+   
     document.getElementById("loadingOverlay").classList.remove("hidden");
     const response = await fetch("/api/get_questions/", {
         method: "POST",

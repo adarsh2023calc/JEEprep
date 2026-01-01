@@ -104,9 +104,10 @@ def run_code(request):
 @api_view(["POST"])
 
 def fetch_questions_boiler_plate(request):
-    number= request.data.get("num",2)
+    number= request.data.get("number")
+
     difficulty = request.data.get("difficulty","Medium")
-    company= request.data.get("company","TCS")
+    company= request.data.get("company")
 
     output = fetch_questions(number,difficulty,company)
 
