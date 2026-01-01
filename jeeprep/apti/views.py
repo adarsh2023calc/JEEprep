@@ -115,6 +115,8 @@ def fetch_questions_boiler_plate(request):
 
 
 
+
+
 def render_questions_page(request):
     return render(request,"coding_questions.html")
 
@@ -183,3 +185,20 @@ def signup_view(request):
         return render_dashboard(request)
     
     return render(request,'landing_page.html')
+
+
+
+@api_view(["POST"])
+def save_assesment_details(request):
+    
+    pass
+
+@api_view(["POST"])
+def save_score_details(request):
+    pass
+
+
+
+@api_view(["POST"])
+def update_assesment(request):
+    pass

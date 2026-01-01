@@ -20,7 +20,7 @@ from django.urls import path
 from apti.views import main_backend_page,aptitude_quiz,software_quiz,verbals_quiz,\
     assesment_quiz,score_view , leetcode_view,run_code,render_questions_page,\
         fetch_questions_boiler_plate,render_landing_page,render_dashboard,login_view,logout_view,\
-       signup_view
+       signup_view,save_assesment_details,save_score_details,update_assesment
 from apti.views import (
     GenerateQuizView
 )
@@ -43,7 +43,10 @@ urlpatterns = [
     path('dashboard.html',render_dashboard,name="dashboard"),
     path('signup',signup_view,name="signup"),
     path('logout',logout_view,name="logout"),
-    path('login',login_view,name="login")
+    path('login',login_view,name="login"),
+    path('api/save_details',save_assesment_details),
+    path('api/save_score',save_score_details),
+    path('api/update_assesment',update_assesment)
 ]
 
 
