@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-
+from rest_framework import status
 
 from .models import QuizSettings
 from .serializers import QuizSettingsSerializer
@@ -191,12 +191,40 @@ def signup_view(request):
 
 @api_view(["POST"])
 def save_assesment_details(request):
-    user_id=request.get("user_id")
-    assesment_id = request.get("assesment_id")
-    data = request.get("body")
-    save_to_bigquery(user_id,assesment_id,data)
-    pass
+    
 
+    try:
+        user_id = request.data.get("user_id")
+        assessment_id = request.data.get("assesment_id")  # fixed spelling
+        data = request.data.get("body")
+        purpose = request.data.get("purpose")
+
+        # Basic validation
+        if not all([assessment_id, data, purpose]):
+            return Response(
+                {"error": "Missing required fields"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        success = save_to_bigquery(user_id, assessment_id, data, purpose)
+
+        if not success:
+            return Response(
+                {"error": "Failed to insert into BigQuery"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+        return Response({"status": "ok"}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        print("BigQuery Error:", str(e))
+        return Response(
+            {"error": "Internal server error"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+    
 @api_view(["POST"])
 def save_score_details(request):
     pass

@@ -6,4 +6,4 @@ env
 jeeprep/apti/migrations/__pycache__
 jeeprep/apti/api_logic/__pycache__
 jeeprep/.env
-jeeprep/apti/api_logic/service.json
+jeeprep/service.json

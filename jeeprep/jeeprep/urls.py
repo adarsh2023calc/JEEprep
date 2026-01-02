@@ -44,9 +44,9 @@ urlpatterns = [
     path('signup',signup_view,name="signup"),
     path('logout',logout_view,name="logout"),
     path('login',login_view,name="login"),
-    path('api/save_details',save_assesment_details),
-    path('api/save_score',save_score_details),
-    path('api/update_assesment',update_assesment)
+    path('api/save_details/',save_assesment_details),
+    path('api/save_score/',save_score_details),
+    path('api/update_assesment/',update_assesment)
 ]
 
 

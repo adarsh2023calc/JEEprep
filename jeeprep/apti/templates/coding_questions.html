@@ -139,21 +139,22 @@ async function getQuestions() {
 
 
     const Userid = "{{ user.username }}";
-    const AssesmentID =  Userid+ company +"CodingQuestions"+ Date.UTC;
-
+    const AssesmentID =  Userid+ company +"CodingQuestions"+ new Date().toLocaleString() ;
+    const purpose ="Coding";
     
 
-    fetch("/api/save_details/", {
+    fetch("api/save_details/", {
         method: "POST",
         headers: { "Content-Type": "application/json" ,
                     "X-CSRFToken": csrftoken
         },
 
-        body: {
+        body: JSON.stringify({
             "user_id": Userid,
-            "assesmen_id":AssesmentID,
-            "body":json_data
-        }
+            "assesment_id":AssesmentID,
+            "body":json_data,
+            "purpose": purpose
+        })
     });
 
 

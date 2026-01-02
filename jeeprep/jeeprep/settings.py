@@ -21,6 +21,11 @@ load_dotenv(BASE_DIR / ".env")
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
+os.environ.setdefault(
+    "GOOGLE_APPLICATION_CREDENTIALS",
+    str(BASE_DIR / "service.json")
+)
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
