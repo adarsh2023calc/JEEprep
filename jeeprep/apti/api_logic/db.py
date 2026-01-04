@@ -18,17 +18,16 @@ def save_to_bigquery(user_id, assessment_id, data, purpose):
       - For Assessment: list of question structs
     """
 
-
+    
     data = json.loads(data)
-    data = data.get("output")
-
+    
     if purpose == "Coding":
+        data = data.get("output")
         rows=[]
         table_id = "locenergy.jeeprep.coding_problems"
         for key in data:
             row = {
                 "user_id":user_id,
-                    
                 "title": key.get("title"),
                 "difficulty": key.get("difficulty"),
                 "company": key.get("company", []),
@@ -44,13 +43,14 @@ def save_to_bigquery(user_id, assessment_id, data, purpose):
         )
 
     else:
+        
         table_id = "locenergy.jeeprep.user_assessment"
 
         row = {
             "user_id": user_id,
             "assessment_id": assessment_id,
-            "questions": data,        # 👈 FIXED
-            "created_at": datetime.utcnow()
+            "questions": data.get("questions"),        
+            "created_at": datetime.utcnow(),
         }
 
         errors = client.insert_rows_json(
