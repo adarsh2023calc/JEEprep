@@ -1,0 +1,13 @@
+{'questions': [
+{'question': 'Which CPU scheduling algorithm selects the process with 
+ the shortest next CPU burst?',
+   'options': ['First-Come, First-Served (FCFS)', 'Shortest Job First (SJF)', 
+               'Round Robin', 'Priority Scheduling'], 
+               'answer': 'Shortest Job First (SJF)', 
+               'topic': "['os']", 'difficulty': 'Easy'}, 
+               {'question': 'In a CI/CD pipeline, 
+                which tool is primarily used for configuration management?',
+                  'options': ['Jenkins', 'Docker', 'Ansible', 'Git'], 
+                  'answer': 'Ansible', 'topic': "['devops']", 'difficulty': 'Easy'}]}
+BigQuery Error: Object of type datetime is not JSON serializable
+Internal Server Error: /api/save_details/

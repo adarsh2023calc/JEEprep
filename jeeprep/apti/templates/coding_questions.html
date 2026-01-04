@@ -140,7 +140,7 @@ async function getQuestions() {
 
     const Userid = "{{ user.username }}";
     const AssesmentID =  Userid+ company +"CodingQuestions"+ new Date().toLocaleString() ;
-    const purpose ="Coding";
+    const purpose ="coding";
     
 
     fetch("api/save_details/", {

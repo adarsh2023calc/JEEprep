@@ -104,6 +104,7 @@
 
       if (!number || number < 1) {
         alert("Enter a valid number of questions.");
+        overlay.classList.add("hidden");
         return;
       }
 
@@ -119,6 +120,7 @@
       // ensure at least one topic checked
       if (!Object.values(topics).some(v => v === true)) {
         alert("Please select at least one topic.");
+        overlay.classList.add("hidden");
         return;
       }
 
@@ -161,7 +163,7 @@
         body: JSON.stringify({
             "user_id": user_id,
             "assesment_id":AssesmentID,
-            "body":json_data,
+            "body":JSON.stringify(json_data),
             "purpose": purpose
           })
         });

@@ -116,6 +116,7 @@
 
       if (!number || number < 1) {
         alert("Enter a valid number of questions.");
+        overlay.classList.add("hidden");
         return;
       }
 
@@ -153,6 +154,7 @@
       // ensure at least one topic checked
       if (!Object.values(topics).some(v => v === true)) {
         alert("Please select at least one topic.");
+        overlay.classList.add("hidden");
         return;
       }
 
@@ -180,8 +182,8 @@
 
         const raw = await response.text();
         const user_id = "{{ user.username }}";
-        const AssesmentID =  Userid+ company +"CodingQuestions"+ new Date().toLocaleString() ;
-        const purpose ="aptitude";
+        const AssesmentID =  user_id+"software_quiz"+ new Date().toLocaleString() ;
+        const purpose ="software_quiz";
         const json_data = JSON.parse(raw);
 
         fetch("api/save_details/",{
@@ -193,7 +195,7 @@
         body: JSON.stringify({
             "user_id": user_id,
             "assesment_id":AssesmentID,
-            "body":json_data,
+            "body":JSON.stringify(json_data),
             "purpose": purpose
           })
         });
