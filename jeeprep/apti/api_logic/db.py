@@ -10,6 +10,7 @@ db = client["jeeprep"]
 
 coding_collection = db["coding_problems"]
 assessment_collection = db["assessment_questions"]
+score_collection= db["score_collection"]
 
 
 def save_to_mongodb(user_id, assessment_id, data, purpose):
@@ -110,3 +111,19 @@ def fetch_from_mongodb(user_id):
 
 
     return json_data
+
+
+def save_score_to_mongodb(user_id,assessment_id,correct_questions,incorrect_questions\
+                          ,unattempted_questions):
+    doc = {
+    "user_id": user_id,
+    "assessment_id": assessment_id,
+    "correct": correct_questions,        # list
+    "incorrect": incorrect_questions,    # list
+    "unattempted": unattempted_questions # list
+    }
+
+    score_collection.insert_one(doc)
+    
+    print("Inserted successfully")
+

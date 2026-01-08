@@ -5,6 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aptitude Quiz Selector</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    function getCookie(name) {
+      let cookieValue = null;
+      const cookies = document.cookie.split(";");
+
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        }
+      }
+      return cookieValue;
+    }
+
+    const csrftoken = getCookie("csrftoken");
+  </script>
 </head>
 <body class="bg-gray-100 p-10">
   <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow space-y-6">
@@ -14,7 +30,7 @@
     <!-- Number of questions -->
     <div>
       <label class="block font-semibold mb-1">Number of Questions</label>
-      <input type="number" id-="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter number of questions" />
+      <input type="number" id="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter number of questions" />
     </div>
 
     <!-- Time allotted -->
@@ -36,7 +52,7 @@
             <!-- Negative marking -->
             <div class="flex items-center space-x-3">
             <label class="font-semibold">Negative Marking</label>
-            <input type="checkbox" class="w-5 h-5" />
+            <input type="checkbox" id="negative" class="w-5 h-5" />
             </div>
 
             <!-- Topic selection -->
@@ -77,6 +93,10 @@
       </button>
     </div>
   </form>  
+  
+  <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="animate-spin h-16 w-16 border-4 border-white border-t-transparent rounded-full"></div>
+</div>
   </div>
   
   <script>
@@ -159,12 +179,15 @@
         localStorage.setItem("quiz_data",JSON.stringify(json_data));
 
         localStorage.setItem("time",time);
+        localStorage.setItem("assessmentID",AssesmentID);
 
         // redirect only after success
         window.location.href = "/assesment.html";
 
       } catch (err) {
+        
         console.error("Quiz Generation Error:", err);
+        alert(err);
         alert("Error generating quiz. Please try again.");
       }
 

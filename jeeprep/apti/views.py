@@ -14,7 +14,7 @@ from .models import QuizSettings
 from .serializers import QuizSettingsSerializer
 from .api_logic.ai import generate_questions
 from .api_logic.fetch import fetch_questions
-from .api_logic.db import save_to_mongodb,fetch_from_mongodb
+from .api_logic.db import save_to_mongodb,fetch_from_mongodb,save_score_to_mongodb
 
 # -----------------------------
 # QUIZ SETTINGS LIST VIEW
@@ -227,7 +227,11 @@ def save_assesment_details(request):
     
 @api_view(["POST"])
 def save_score_details(request):
-    pass
+    correct = request.get("correct")
+    incorrect = request.get("incorrect")
+    unattempted = request.get("unattempted")
+    
+    save_score_to_mongodb(correct,incorrect,unattempted)
 
 
 

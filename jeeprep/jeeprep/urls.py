@@ -49,7 +49,8 @@ urlpatterns = [
     path('api/save_details/',save_assesment_details),
     path('api/save_score/',save_score_details),
     path('api/update_assesment/',update_assesment),
-    path('api/get_details/',fetch_past_assessments)
+    path('api/get_details/',fetch_past_assessments),
+    
 ]
 
 
