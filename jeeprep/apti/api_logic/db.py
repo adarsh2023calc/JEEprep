@@ -124,6 +124,7 @@ def save_score_to_mongodb(user_id,assessment_id,correct_questions,incorrect_ques
     }
 
     score_collection.insert_one(doc)
-    
+
     print("Inserted successfully")
+
 
