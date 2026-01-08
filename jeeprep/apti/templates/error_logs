@@ -11,3 +11,44 @@
                   'answer': 'Ansible', 'topic': "['devops']", 'difficulty': 'Easy'}]}
 BigQuery Error: Object of type datetime is not JSON serializable
 Internal Server Error: /api/save_details/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+purposes.forEach(purpose => {
+
+            const table = document.getElementById(purpose);
+        if (!table || !data[purpose]) return;
+
+        const tbody = document.createElement("tbody");
+
+        data[purpose].forEach(item => {
+            const tr = document.createElement("tr");
+            const td = document.createElement("td");
+            td.innerText = purpose === "coding"
+            ? item.title
+            : item.assessment_id;
+
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+        });

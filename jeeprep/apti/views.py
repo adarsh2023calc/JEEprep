@@ -14,7 +14,7 @@ from .models import QuizSettings
 from .serializers import QuizSettingsSerializer
 from .api_logic.ai import generate_questions
 from .api_logic.fetch import fetch_questions
-from .api_logic.db import save_to_bigquery
+from .api_logic.db import save_to_mongodb,fetch_from_mongodb
 
 # -----------------------------
 # QUIZ SETTINGS LIST VIEW
@@ -206,7 +206,7 @@ def save_assesment_details(request):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        success = save_to_bigquery(user_id, assessment_id, data, purpose)
+        success = save_to_mongodb(user_id, assessment_id, data, purpose)
 
         if not success:
             return Response(
@@ -217,7 +217,7 @@ def save_assesment_details(request):
         return Response({"status": "ok"}, status=status.HTTP_200_OK)
 
     except Exception as e:
-        print("BigQuery Error:", str(e))
+        print("MongoDB Error:", str(e))
         return Response(
             {"error": "Internal server error"},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -231,6 +231,26 @@ def save_score_details(request):
 
 
 
-@api_view(["POST"])
+@api_view(["PUT"])
 def update_assesment(request):
     pass
+
+
+
+@api_view(["POST"])
+def fetch_past_assessments(request):
+     try:
+        user_id = request.data.get("user_id")
+        result =fetch_from_mongodb(user_id)
+        return Response(result)
+     
+     except Exception as e:
+        print("Error:", str(e))
+        return Response(
+            {"error": "Internal server error"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+        
+

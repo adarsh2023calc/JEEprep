@@ -1,4 +1,5 @@
 
 Django
 groq
-google-cloud-bigquery
+pymongo
+load-dotenv

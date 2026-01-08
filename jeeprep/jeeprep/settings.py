@@ -20,6 +20,7 @@ load_dotenv(BASE_DIR / ".env")
 
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+MONGODB_URL= os.getenv("MONGODB_URL")
 
 os.environ.setdefault(
     "GOOGLE_APPLICATION_CREDENTIALS",
