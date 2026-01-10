@@ -6,6 +6,22 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <title>Assessment Page</title>
 </head>
+<script>
+  function getCookie(name) {
+      let cookieValue = null;
+      const cookies = document.cookie.split(";");
+
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        }
+      }
+      return cookieValue;
+    }
+
+    const csrftoken = getCookie("csrftoken")
+</script>
 <body class="bg-gray-100 p-6">
   <div class="max-w-6xl mx-auto bg-white p-6 rounded-xl shadow-xl">
     <div class="flex justify-end mb-4">
@@ -216,6 +232,24 @@ function findScore(){
   localStorage.setItem("correctQuestion",JSON.stringify(correctQuestions));
   localStorage.setItem("incorrectQuestion",JSON.stringify(incorrectQuestions));
   localStorage.setItem("unattemptedQuestions",JSON.stringify(UnattemptedQuestions));
+
+  fetch("/api/save_score/",
+    {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken
+          },
+          body: JSON.stringify( {
+            "user_id": "{{ user.username }}",
+            "assessment_id": localStorage.getItem("assessmentID"),
+            "correct" : JSON.parse(localStorage.getItem("correctQuestion")),
+            "incorrect": JSON.parse(localStorage.getItem("incorrectQuestion")),
+            "unattempted": JSON.parse(localStorage.getItem("unattemptedQuestions")),
+            "purpose": localStorage.getItem("purpose")
+          })
+        });
+    
   window.location.replace("/score.html");
 
 

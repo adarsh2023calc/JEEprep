@@ -76,7 +76,7 @@
                 </div>
 
                 <div class="card purple">
-                    <h3>Software Topics</h3>
+                    <h3>Software Topics Accuracy</h3>
                     <p id="software-score">--</p>
                 </div>
             </div>
@@ -126,8 +126,8 @@
         // Remove loading message
         section.innerHTML = "<h2>Recent Activity</h2>";
         
-        // Update score cards if data contains scores
-        updateScoreCards(data);
+        // Update score cards
+        updateScoreCards();
         
         // Display tables
         displayTables(data, section);
@@ -138,10 +138,25 @@
     }
 }
 
-function updateScoreCards(data) {
-    // Add logic to calculate and update scores
-    // Example:
-    // document.getElementById('aptitude-score').textContent = calculateScore(data.aptitude);
+async function updateScoreCards() {
+    const scores = await fetch("/api/get_scores/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken
+            },
+            body: JSON.stringify({ user_id: "{{ user.username }}" })
+        });
+
+    let score = await scores.json();
+    
+    let aptitude_score = score['aptitude'];
+    let verbals_score =score['verbals'];
+    let software_score = score['software_quiz'];
+
+    document.getElementById("aptitude-score").innerText=aptitude_score;
+    document.getElementById("verbals-score").innerText=verbals_score;
+    document.getElementById("software-score").innerText=software_score;
 }
 
 function displayTables(data, section) {

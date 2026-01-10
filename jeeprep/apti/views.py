@@ -14,7 +14,8 @@ from .models import QuizSettings
 from .serializers import QuizSettingsSerializer
 from .api_logic.ai import generate_questions
 from .api_logic.fetch import fetch_questions
-from .api_logic.db import save_to_mongodb,fetch_from_mongodb,save_score_to_mongodb
+from .api_logic.db import save_to_mongodb,fetch_from_mongodb,save_score_to_mongodb,\
+    fetch_score_from_mongodb
 
 # -----------------------------
 # QUIZ SETTINGS LIST VIEW
@@ -227,11 +228,25 @@ def save_assesment_details(request):
     
 @api_view(["POST"])
 def save_score_details(request):
-    correct = request.get("correct")
-    incorrect = request.get("incorrect")
-    unattempted = request.get("unattempted")
-    
-    save_score_to_mongodb(correct,incorrect,unattempted)
+    print(request)
+    try:
+        user_id= request.data.get("user_id")
+        assessment_id=request.data.get("assessment_id")
+        correct = request.data.get("correct")
+        incorrect = request.data.get("incorrect")
+        unattempted = request.data.get("unattempted")
+        purpose = request.data.get("purpose")
+        
+        save_score_to_mongodb(user_id=user_id,assessment_id=assessment_id,\
+                            correct_questions=correct,incorrect_questions=incorrect,\
+                                unattempted_questions=unattempted,purpose=purpose)
+        return Response({"status": "ok"}, status=status.HTTP_200_OK)
+    except Exception as e:
+        print("MongoDB Error:", str(e))
+        return Response(
+            {"error": "Internal server error"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 
 
@@ -250,6 +265,20 @@ def fetch_past_assessments(request):
      
      except Exception as e:
         print("Error:", str(e))
+        return Response(
+            {"error": "Internal server error"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+@api_view(["POST"])
+def get_score(request):
+    try:
+        user_id= request.data.get("user_id")
+        result = fetch_score_from_mongodb(user_id)
+        return Response(result)
+    
+    except Exception as e:
+        print("MongoDb Error: ",e)
         return Response(
             {"error": "Internal server error"},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR

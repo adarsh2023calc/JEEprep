@@ -113,19 +113,76 @@ def fetch_from_mongodb(user_id):
     return json_data
 
 
-def save_score_to_mongodb(user_id,assessment_id,correct_questions,incorrect_questions\
+def save_score_to_mongodb(user_id,purpose,assessment_id:str,correct_questions,incorrect_questions\
                           ,unattempted_questions):
     doc = {
     "user_id": user_id,
     "assessment_id": assessment_id,
     "correct": correct_questions,        
     "incorrect": incorrect_questions,    
-    "unattempted": unattempted_questions 
+    "unattempted": unattempted_questions,
+    "correct_count": len(correct_questions),
+    "incorrect_count": len(incorrect_questions),
+    "unattempted_count": len(unattempted_questions),
+    "purpose":purpose
     }
 
     score_collection.insert_one(doc)
 
     print("Inserted successfully")
+
+
+def fetch_score_from_mongodb(user_id):
+    json_data ={}
+    
+    for purpose in ["software_quiz", "aptitude", "verbals"]:
+
+        cursor = score_collection.aggregate([
+            {
+                "$match": {
+                    "user_id": user_id,
+                    "purpose": purpose
+                }
+            },
+            {
+                "$group": {
+                    "_id": "$user_id",
+                    "total_correct": { "$sum": "$correct_count" },
+                    "total_incorrect": { "$sum": "$incorrect_count" },
+                    "total_unattempted": { "$sum": "$unattempted_count" }
+                }
+            },
+            {
+                "$addFields": {
+                    "accuracy": {
+                        "$cond": [
+                            { "$eq": [{ "$add": ["$total_correct", "$total_incorrect"] }, 0] },
+                            0,
+                            {
+                                "$multiply": [
+                                    {
+                                        "$divide": [
+                                            "$total_correct",
+                                            { "$add": ["$total_correct", "$total_incorrect"] }
+                                        ]
+                                    },
+                                    100
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ])
+
+        
+        json_data[purpose] = next(cursor, {}).get("accuracy", 0)
+
+
+        print(json_data)
+    return json_data
+
+
 
 
 

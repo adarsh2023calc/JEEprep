@@ -37,6 +37,8 @@ Practice makes you perfect. Lets help you with AI
 
 ![Jeeprep Aptitude quiz report](assets/Score.png)
 
+![Jeeprep Dashboard report of User](assets/dashboard.png)
+
 
 
 # Tech Stack
@@ -75,5 +77,6 @@ env\Scripts\activate
 ```
 
 # 
+
 
 
