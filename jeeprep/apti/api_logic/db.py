@@ -118,13 +118,15 @@ def save_score_to_mongodb(user_id,assessment_id,correct_questions,incorrect_ques
     doc = {
     "user_id": user_id,
     "assessment_id": assessment_id,
-    "correct": correct_questions,        # list
-    "incorrect": incorrect_questions,    # list
-    "unattempted": unattempted_questions # list
+    "correct": correct_questions,        
+    "incorrect": incorrect_questions,    
+    "unattempted": unattempted_questions 
     }
 
     score_collection.insert_one(doc)
 
     print("Inserted successfully")
+
+
 
 
