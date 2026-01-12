@@ -1,33 +1,26 @@
-
-# Use official Python image
 FROM python:3.11-slim
 
-# Prevent Python from writing pyc files
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Set working directory
-WORKDIR /jeeprep
+# Set working directory to project root
+WORKDIR /app
 
-# Install system dependencies
+# System deps
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
-COPY requirements.txt .
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+# Copy project
+COPY . /app/
 
-# Copy project files
-COPY . .
+# Install Python deps
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Collect static files
+# Collect static
 RUN python manage.py collectstatic --noinput
 
-# Expose port
 EXPOSE 8000
 
-# Start Gunicorn
 CMD ["gunicorn", "jeeprep.wsgi:application", "--bind", "0.0.0.0:8000"]
