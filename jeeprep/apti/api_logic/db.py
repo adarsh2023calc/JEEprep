@@ -185,5 +185,5 @@ def fetch_score_from_mongodb(user_id):
 
 
 
-
-
+def fetch_purpose_pipeline_from_mongodb(user_id):
+    pass

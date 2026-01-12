@@ -15,7 +15,7 @@ from .serializers import QuizSettingsSerializer
 from .api_logic.ai import generate_questions
 from .api_logic.fetch import fetch_questions
 from .api_logic.db import save_to_mongodb,fetch_from_mongodb,save_score_to_mongodb,\
-    fetch_score_from_mongodb
+    fetch_score_from_mongodb,fetch_purpose_pipeline_from_mongodb
 
 # -----------------------------
 # QUIZ SETTINGS LIST VIEW
@@ -275,6 +275,21 @@ def get_score(request):
     try:
         user_id= request.data.get("user_id")
         result = fetch_score_from_mongodb(user_id)
+        return Response(result)
+    
+    except Exception as e:
+        print("MongoDb Error: ",e)
+        return Response(
+            {"error": "Internal server error"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(["POST"])
+def fetch_purpose_pipeline(request):
+    try:
+        user_id= request.data.get("user_id")
+        result = fetch_purpose_pipeline_from_mongodb(user_id)
         return Response(result)
     
     except Exception as e:

@@ -55,7 +55,7 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="content">
+        <main id="content" class="content">
 
             <!-- Top Bar -->
             <div class="top-bar">
@@ -88,6 +88,9 @@
             </section>
 
         </main>
+
+        <main id="analytics">
+        </main>
     </div>
 </div>
 
@@ -101,6 +104,45 @@
 
         if (listID === "dashboard") {
             LoadPastAssessments();
+        }
+
+        if (listID=="analytics"){
+            document.getElementById("dashboard")="";
+            document.getElementById("content")="";
+
+            LoadAnalytics()
+        }
+    }
+
+    async function LoadAnalytics(params) {
+
+        const response = await fetch("/api/get_subject_performance",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken
+            },
+            body: JSON.stringify({ user_id: "{{ user.username }}" })
+        });
+
+        data = await response.json();
+
+        let top_performance={};
+        let average_performance={};
+        let improvement_performance ={};
+        for(purpose in Object.keys(data)){
+            if  (data[purpose] >= 75){
+                top_performance[purpose]= data[purpose];
+            }
+
+            else if(50 <= data[purpose] < 75){
+                average_performance[purpose]=data[purpose];
+            }
+            else{
+                improvement_performance[purpose]= data[purpose];
+            }
+        
         }
     }
 

@@ -21,7 +21,7 @@ from apti.views import main_backend_page,aptitude_quiz,software_quiz,verbals_qui
     assesment_quiz,score_view , leetcode_view,run_code,render_questions_page,\
         fetch_questions_boiler_plate,render_landing_page,render_dashboard,login_view,logout_view,\
        signup_view,save_assesment_details,save_score_details,get_score,\
-       fetch_past_assessments
+       fetch_past_assessments,fetch_purpose_pipeline
        
 from apti.views import (
     GenerateQuizView
@@ -50,6 +50,7 @@ urlpatterns = [
     path('api/save_score/',save_score_details),
     path('api/get_scores/',get_score),
     path('api/get_details/',fetch_past_assessments),
+    path("/api/get_subject_performance",fetch_purpose_pipeline)
     
 ]
 
