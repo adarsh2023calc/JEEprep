@@ -3,3 +3,4 @@ gunicorn
 groq
 pymongo
 load-dotenv
+djangorestframework
