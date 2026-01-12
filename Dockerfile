@@ -23,6 +23,6 @@ RUN python jeeprep/manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-DJANGO_SETTINGS_MODULE = "jeeprep.settings"
+ENV DJANGO_SETTINGS_MODULE=jeeprep.settings
 
 CMD ["gunicorn", "jeeprep.wsgi:application", "--bind", "0.0.0.0:8000"]
