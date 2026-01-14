@@ -4,3 +4,4 @@ groq
 pymongo
 load-dotenv
 djangorestframework
+whitenoise
