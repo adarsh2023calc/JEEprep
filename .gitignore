@@ -1,9 +1,8 @@
 
 
-jeeprep/apti/__pycache__
-jeeprep/jeeprep/__pycache__
+apti/__pycache__
+jeeprep/__pycache__
 env
-jeeprep/apti/migrations/__pycache__
-jeeprep/apti/api_logic/__pycache__
-jeeprep/.env
-jeeprep/service.json
+apti/migrations/__pycache__
+apti/api_logic/__pycache__
+.env
