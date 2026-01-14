@@ -21,6 +21,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Collect static files
 RUN python jeeprep/manage.py collectstatic --noinput
 
+ENV DJANGO_SETTINGS_MODULE=jeeprep.jeeprep.settings
+
 EXPOSE 8000
 
-CMD ["gunicorn", "jeeprep.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "jeeprep.jeeprep.wsgi:application", "--bind", "0.0.0.0:8000"]
+
