@@ -146,3 +146,6 @@ ALLOWED_HOSTS = [
 ]
 
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://gleaming-prosperity-production-961b.up.railway.app",
+]
