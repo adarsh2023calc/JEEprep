@@ -10,6 +10,10 @@
 </head>
 <body class="bg-gray-100 p-10">
   <div class="max-w-xl mx-auto space-y-6">
+    <button onclick="Navigate()"
+                    class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl text-lg">
+                    Go to Dashboard 
+    </button>
 
     <div class="bg-white p-6 rounded-2xl shadow">
       <h2 class="text-2xl font-semibold mb-3">Aptitude Section</h2>
@@ -40,6 +44,8 @@
     </div>
 
   </div>
+
+
   <script>
     function goToQuiz(section){
 
@@ -49,6 +55,10 @@
       else{
       window.location.href = "/" + section+"_"+"quiz.html";
       }
+    }
+
+    function Navigate(){
+      window.location.replace("/dashboard.html");
     }
   </script>
 
