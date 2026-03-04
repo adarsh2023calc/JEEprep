@@ -6,258 +6,276 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <title>Assessment Page</title>
 </head>
+
 <script>
   function getCookie(name) {
-      let cookieValue = null;
-      const cookies = document.cookie.split(";");
+    let cookieValue = null;
+    const cookies = document.cookie.split(";");
 
-      for (let cookie of cookies) {
-        cookie = cookie.trim();
-        if (cookie.startsWith(name + "=")) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        }
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
+      if (cookie.startsWith(name + "=")) {
+        cookieValue = decodeURIComponent(
+          cookie.substring(name.length + 1)
+        );
       }
-      return cookieValue;
     }
+    return cookieValue;
+  }
 
-    const csrftoken = getCookie("csrftoken")
+  const csrftoken = getCookie("csrftoken");
 </script>
+
 <body class="bg-gray-100 p-6">
   <div class="max-w-6xl mx-auto bg-white p-6 rounded-xl shadow-xl">
+
+    <!-- Timer -->
     <div class="flex justify-end mb-4">
-      <div id="timerBox" class="text-xl font-bold px-4 py-2 bg-gray-800 text-white rounded-lg">
-      </div>
+      <div
+        id="timerBox"
+        class="text-xl font-bold px-4 py-2 bg-gray-800 text-white rounded-lg"
+      ></div>
     </div>
+
     <!-- Question Display -->
     <div id="question-container" class="mb-6">
-      <h2 class="text-xl font-semibold mb-4">Question <span id="qNumber">1</span></h2>
-      <p id="questionText" class="text-gray-700 text-lg mb-3">Loading question...</p>
-      <div class ="flex-col mb-6" id="optionBadge"></div>
+      <h2 class="text-xl font-semibold mb-4">
+        Question <span id="qNumber">1</span>
+      </h2>
+      <p
+        id="questionText"
+        class="text-gray-700 text-lg mb-3"
+      >
+        Loading question...
+      </p>
+      <div id="optionBadge" class="flex-col mb-6"></div>
     </div>
 
     <!-- Question Badges -->
-    <div class="flex flex gap-5 mb-3" id="questionBadges"></div>
-    
+    <div
+      id="questionBadges"
+      class="flex gap-5 mb-3"
+    ></div>
 
     <!-- Navigation Buttons -->
     <div class="flex justify-between mt-6">
-      <button id="prevBtn" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-black rounded-lg">Previous</button>
-      <button id="nextBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Next</button>
+      <button
+        id="prevBtn"
+        class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-black rounded-lg"
+      >
+        Previous
+      </button>
+
+      <button
+        id="nextBtn"
+        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+      >
+        Next
+      </button>
     </div>
 
     <!-- Submit Button -->
-    <div class="text-center mt-8 hidden" id="submitContainer">
-      <button onclick= "findScore()"class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl text-lg">Submit Test</button>
+    <div
+      id="submitContainer"
+      class="text-center mt-8 hidden"
+    >
+      <button
+        onclick="findScore()"
+        class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl text-lg"
+      >
+        Submit Test
+      </button>
     </div>
-
   </div>
 
   <script>
-  
-
-  const data = JSON.parse(localStorage.getItem("quiz_data"));
-
-  console.log("data",data);
-  if (!data) {
-    alert("Quiz data missing. Please generate again.");
-    window.location.href = "/";
-  }
-
-  const question_list= data.questions;
-  const questions = question_list.map(key =>key.question);
-  const options = question_list.map(key => key.options);
-  const answers = question_list.map(key => key.answer);
-
-
-  let current = 0;
-  let attempted = Array(questions.length).fill(false);
-
-  const time = localStorage.getItem("time");
-  console.log("Time alloted is",time);
-
-  // store user's choice (index of selected option)
-  let userAnswers = Array(questions.length).fill(null);
-
-  const qText = document.getElementById("questionText");
-  const qNum = document.getElementById("qNumber");
-  const badges = document.getElementById("questionBadges");
-  const submitContainer = document.getElementById("submitContainer");
-  const optionBadge = document.getElementById("optionBadge");
-
-  function loadQuestion() {
-    qText.textContent = questions[current];
-    qNum.textContent = current + 1;
-
-    submitContainer.classList.toggle("hidden", current !== questions.length - 1);
-
-    const qOptions = options[current];
-    optionBadge.innerHTML = "";
-
-  
-    qOptions.forEach((opt, index) => {
-      const label = document.createElement("label");
-      label.className = "flex items-center gap-3 px-4 py-2 bg-gray-200 rounded-xl cursor-pointer hover:bg-gray-300 transition-all mb-2";
-
-      const radio = document.createElement("input");
-      radio.type = "radio";
-      radio.name = "optionSelect";
-      radio.value = index;
-
-      // restore previously selected option
-      if (userAnswers[current] === index) {
-        radio.checked = true;
-      }
-
-      // save selection on click
-      radio.onchange = () => {
-        userAnswers[current] = index;
-        attempted[current] = true;
-        renderBadges();
-      };
-
-      const letter = String.fromCharCode(97 + index); // a, b, c, d
-      const text = document.createElement("span");
-      text.textContent = `${letter}) ${opt}`;
-
-      label.appendChild(radio);
-      label.appendChild(text);
-
-      optionBadge.appendChild(label);
-    });
-  }
-
-  function renderBadges() {
-    badges.innerHTML = "";
-
-    questions.forEach((_, i) => {
-      const btn = document.createElement("button");
-      btn.textContent = i + 1;
-
-      btn.className =
-        "w-10 h-10 rounded-full text-white text-sm " +
-        (attempted[i]
-          ? "bg-green-600 hover:bg-green-700"
-          : "bg-blue-600 hover:bg-blue-700");
-
-      btn.onclick = () => {
-        current = i;
-        loadQuestion();
-      };
-
-      badges.appendChild(btn);
-    });
-  }
-
-  document.getElementById("nextBtn").onclick = () => {
-    //attempted[current] = true;
-    if (current < questions.length - 1) current++;
-    loadQuestion();
-    renderBadges();
-  };
-
-  document.getElementById("prevBtn").onclick = () => {
-    if (current > 0) current--;
-    loadQuestion();
-    renderBadges();
-  };
-
-  loadQuestion();
-  renderBadges();
-
-
-
-
-let totalSeconds = time * 60;
-
-function startTimer() {
-  const timerBox = document.getElementById("timerBox");
-
-  const interval = setInterval(() => {
-    let minutes = Math.floor(totalSeconds / 60);
-    let seconds = totalSeconds % 60;
-
-    timerBox.textContent =
-      `${minutes.toString().padStart(2, "0")}:` +
-      `${seconds.toString().padStart(2, "0")}`;
-
-    // Last 1 minute turn red
-    if (totalSeconds <= 60) {
-      timerBox.classList.remove("bg-gray-800");
-      timerBox.classList.add("bg-red-600");
+    const data = JSON.parse(localStorage.getItem("quiz_data"));
+    if (!data) {
+      alert("Quiz data missing. Please generate again.");
+      window.location.href = "/";
     }
 
-    // When time ends → auto submit
-    if (totalSeconds <= 0) {
-      clearInterval(interval);
-      alert("Time is up! Submitting test...");
-      
-      document.getElementById("submitContainer").querySelector("button").click();
-      return;
-    }
+    const question_list = data.questions;
+    const questions = question_list.map(q => q.question);
+    const options = question_list.map(q => q.options);
+    const answers = question_list.map(q => q.answer);
 
-    totalSeconds--;
-  }, 1000);
-}
+    let current = 0;
+    let attempted = Array(questions.length).fill(false);
+    let userAnswers = Array(questions.length).fill(null);
 
-function findScore(){
-   
+    const time = localStorage.getItem("time");
 
-  // Count correct answers
+    const qText = document.getElementById("questionText");
+    const qNum = document.getElementById("qNumber");
+    const badges = document.getElementById("questionBadges");
+    const submitContainer = document.getElementById("submitContainer");
+    const optionBadge = document.getElementById("optionBadge");
 
-  let correctQuestions=[];
-  let incorrectQuestions= [];
-  let UnattemptedQuestions=[];
+    function loadQuestion() {
+      qText.textContent = questions[current];
+      qNum.textContent = current + 1;
 
-  const score = userAnswers
-    .map((selectedOptionIndex, questionIndex) => {
-      // if question was attempted and a valid option was selected
-      if (attempted[questionIndex] && selectedOptionIndex !== null) {
-        // compare the selected option text with the correct answer text
-        if (options[questionIndex][selectedOptionIndex] === answers[questionIndex]){
-          correctQuestions.push(question_list[questionIndex]);
-          return true;
+      submitContainer.classList.toggle(
+        "hidden",
+        current !== questions.length - 1
+      );
+
+      optionBadge.innerHTML = "";
+      options[current].forEach((opt, index) => {
+        const label = document.createElement("label");
+        label.className =
+          "flex items-center gap-3 px-4 py-2 bg-gray-200 rounded-xl cursor-pointer hover:bg-gray-300 mb-2";
+
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "optionSelect";
+        radio.value = index;
+
+        if (userAnswers[current] === index) {
+          radio.checked = true;
         }
-        incorrectQuestions.push(question_list[questionIndex]);
-      } else {
-        UnattemptedQuestions.push(question_list[questionIndex]);
-        return false;
-      }
-    })
-    .reduce((sum, v) => sum + (v ? 1 : 0), 0);
 
-  // Save and navigate
-  localStorage.setItem("correct", score);
-  localStorage.setItem("incorrect", incorrectQuestions.length);
-  localStorage.setItem("unattempted",UnattemptedQuestions.length);
-  localStorage.setItem("correctQuestion",JSON.stringify(correctQuestions));
-  localStorage.setItem("incorrectQuestion",JSON.stringify(incorrectQuestions));
-  localStorage.setItem("unattemptedQuestions",JSON.stringify(UnattemptedQuestions));
+        radio.onchange = () => {
+          userAnswers[current] = index;
+          attempted[current] = true;
+          renderBadges();
+        };
 
-  fetch("/api/save_score/",
-    {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrftoken
-          },
-          body: JSON.stringify( {
-            "user_id": "{{ user.username }}",
-            "assessment_id": localStorage.getItem("assessmentID"),
-            "correct" : JSON.parse(localStorage.getItem("correctQuestion")),
-            "incorrect": JSON.parse(localStorage.getItem("incorrectQuestion")),
-            "unattempted": JSON.parse(localStorage.getItem("unattemptedQuestions")),
-            "purpose": localStorage.getItem("purpose")
-          })
-        });
-    
-  window.location.replace("/score.html");
+        const text = document.createElement("span");
+        const letter = String.fromCharCode(97 + index);
+        text.textContent = `${letter}) ${opt}`;
 
+        label.appendChild(radio);
+        label.appendChild(text);
+        optionBadge.appendChild(label);
+      });
+    }
 
-  
-}
+    function renderBadges() {
+      badges.innerHTML = "";
+      questions.forEach((_, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = i + 1;
+        btn.className =
+          "w-10 h-10 rounded-full text-white text-sm " +
+          (attempted[i]
+            ? "bg-green-600 hover:bg-green-700"
+            : "bg-blue-600 hover:bg-blue-700");
 
-document.addEventListener("DOMContentLoaded", startTimer);
+        btn.onclick = () => {
+          current = i;
+          loadQuestion();
+        };
 
-</script>
+        badges.appendChild(btn);
+      });
+    }
+
+    document.getElementById("nextBtn").onclick = () => {
+      if (current < questions.length - 1) current++;
+      loadQuestion();
+      renderBadges();
+    };
+
+    document.getElementById("prevBtn").onclick = () => {
+      if (current > 0) current--;
+      loadQuestion();
+      renderBadges();
+    };
+
+    loadQuestion();
+    renderBadges();
+
+    let totalSeconds = time * 60;
+
+    function startTimer() {
+      const timerBox = document.getElementById("timerBox");
+
+      const interval = setInterval(() => {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+
+        timerBox.textContent = `${minutes
+          .toString()
+          .padStart(2, "0")}:${seconds
+          .toString()
+          .padStart(2, "0")}`;
+
+        if (totalSeconds <= 60) {
+          timerBox.classList.replace("bg-gray-800", "bg-red-600");
+        }
+
+        if (totalSeconds <= 0) {
+          clearInterval(interval);
+          alert("Time is up! Submitting test...");
+          document
+            .querySelector("#submitContainer button")
+            .click();
+          return;
+        }
+
+        totalSeconds--;
+      }, 1000);
+    }
+
+    function findScore() {
+      let correctQuestions = [];
+      let incorrectQuestions = [];
+      let unattemptedQuestions = [];
+
+      const score = userAnswers
+        .map((ans, i) => {
+          if (attempted[i] && ans !== null) {
+            if (options[i][ans] === answers[i]) {
+              correctQuestions.push(question_list[i]);
+              return true;
+            }
+            incorrectQuestions.push(question_list[i]);
+          } else {
+            unattemptedQuestions.push(question_list[i]);
+          }
+          return false;
+        })
+        .reduce((a, b) => a + (b ? 1 : 0), 0);
+
+      localStorage.setItem("correct", score);
+      localStorage.setItem("incorrect", incorrectQuestions.length);
+      localStorage.setItem("unattempted", unattemptedQuestions.length);
+
+      localStorage.setItem(
+        "correctQuestion",
+        JSON.stringify(correctQuestions)
+      );
+      localStorage.setItem(
+        "incorrectQuestion",
+        JSON.stringify(incorrectQuestions)
+      );
+      localStorage.setItem(
+        "unattemptedQuestions",
+        JSON.stringify(unattemptedQuestions)
+      );
+
+      fetch("/api/save_score/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrftoken
+        },
+        body: JSON.stringify({
+          user_id: "{{ user.username }}",
+          assessment_id: localStorage.getItem("assessmentID"),
+          correct: correctQuestions,
+          incorrect: incorrectQuestions,
+          unattempted: unattemptedQuestions,
+          purpose: localStorage.getItem("purpose")
+        })
+      });
+
+      window.location.replace("/score.html");
+    }
+
+    document.addEventListener("DOMContentLoaded", startTimer);
+  </script>
 </body>
 </html>

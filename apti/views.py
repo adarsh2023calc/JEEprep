@@ -176,17 +176,13 @@ def signup_view(request):
 
         if User.objects.filter(username=userName).exists():
             messages.error(request, "Username already exists")
-
-            return render_dashboard(request)
+        
         
 
         user = User.objects.create_user(username=userName,email=email,password=password1)
         user.save()
         messages.success(request,"Message saved successfully")
-
-        return render_dashboard(request)
-    
-    return render(request,'landing_page.html')
+        return render(request,'landing_page.html')
 
 
 

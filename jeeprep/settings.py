@@ -142,12 +142,14 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 ALLOWED_HOSTS = [
-    "gleaming-prosperity-production-961b.up.railway.app",
-    "jeeprep-myl7.onrender.com"
+    "https://gleaming-prosperity-production-961b.up.railway.app",
+    "https://jeeprep-myl7.onrender.com",
+    'localhost'
 ]
 
 
 CSRF_TRUSTED_ORIGINS = [
     "https://gleaming-prosperity-production-961b.up.railway.app",
-    "jeeprep-myl7.onrender.com"
+    "https://jeeprep-myl7.onrender.com",
+    
 ]

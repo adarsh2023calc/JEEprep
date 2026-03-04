@@ -59,8 +59,10 @@
 
             <!-- Top Bar -->
             <div class="top-bar">
-                <input type="text" placeholder="Search here...">
-                <img src="https://i.pravatar.cc/40" class="avatar">
+                <button onclick="Naviagte()"
+                    class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl text-lg">
+                    Go to Quizzes and Assessments 
+                </button>
             </div>
 
             <!-- Stats Cards -->
@@ -238,6 +240,14 @@ function displayTables(data, section) {
         section.appendChild(table);
     }
 }
+
+
+function Naviagte(){
+    window.location.replace("/index.html");
+}
+
+
+
 </script>
 
 </body>
