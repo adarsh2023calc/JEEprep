@@ -144,6 +144,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 ALLOWED_HOSTS = [
     "https://gleaming-prosperity-production-961b.up.railway.app",
     "https://jeeprep-myl7.onrender.com",
+    'jeeprep-myl7.onrender.com',
     'localhost'
 ]
 

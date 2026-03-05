@@ -14,8 +14,13 @@ from .models import QuizSettings
 from .serializers import QuizSettingsSerializer
 from .api_logic.ai import generate_questions
 from .api_logic.fetch import fetch_questions
-from .api_logic.db import save_to_mongodb,fetch_from_mongodb,save_score_to_mongodb,\
-    fetch_score_from_mongodb,fetch_purpose_pipeline_from_mongodb
+from .api_logic.db import (
+    save_to_mongodb,
+    fetch_from_mongodb,
+    save_score_to_mongodb,
+    fetch_score_from_mongodb,
+    fetch_purpose_pipeline_from_mongodb,
+)
 
 # -----------------------------
 # QUIZ SETTINGS LIST VIEW

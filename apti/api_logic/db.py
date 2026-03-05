@@ -1,3 +1,5 @@
+from pydoc_data import topics
+
 from pymongo import MongoClient
 from datetime import datetime
 from django.conf import settings
@@ -186,5 +188,103 @@ def fetch_score_from_mongodb(user_id):
 
 
 def fetch_purpose_pipeline_from_mongodb(user_id):
+    json_data ={}
+    cursor = score_collection.aggregate([
+        {
+            "$match": { "user_id": user_id }
+        },
+        {
+            "$project": {
+                "all_questions": {
+                    "$concatArrays": [
+                        {
+                            "$map": {
+                                "input": "$correct",
+                                "as": "c",
+                                "in": {
+                                    "topic": "$$c.topic",
+                                    "status": "correct"
+                                }
+                            }
+                        },
+                        {
+                            "$map": {
+                                "input": "$incorrect",
+                                "as": "i",
+                                "in": {
+                                    "topic": "$$i.topic",
+                                    "status": "incorrect"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        { "$unwind": "$all_questions" },
+        {
+            "$group": {
+                "_id": "$all_questions.topic",
+                "total_correct": {
+                    "$sum": {
+                        "$cond": [
+                            { "$eq": ["$all_questions.status", "correct"] },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                "total_incorrect": {
+                    "$sum": {
+                        "$cond": [
+                            { "$eq": ["$all_questions.status", "incorrect"] },
+                            1,
+                            0
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "$addFields": {
+                "accuracy": {
+                    "$cond": [
+                        { "$eq": [{ "$add": ["$total_correct", "$total_incorrect"] }, 0] },
+                        0,
+                        {
+                            "$multiply": [
+                                {
+                                    "$divide": [
+                                        "$total_correct",
+                                        { "$add": ["$total_correct", "$total_incorrect"] }
+                                    ]
+                                },
+                                100
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    ])
+    
         
-    pass
+    json_data = {}
+
+    topics=["Reading_comprehension","Sentence_correction","grammar","vocabulary", "error_spotting","os","dbms","networks","DS","algorithms","cyber","oops" ,"compiler","dsa","ai","ml","dl","dsml","architecture","cloud","devops","software", "web","linux","sql","aptitude","systemdesign","arithemetic","number_system","algebra","probability","data_interpretation"]
+    for doc in cursor:
+        json_data[doc["_id"]] = doc["accuracy"]
+        print(doc["_id"], doc["accuracy"])
+
+    # Ensure all topics exist (default 0)
+    for topic in topics:
+        if topic not in json_data:
+            json_data[topic] = 0
+
+    print(json_data)
+    return json_data
+
+
+
+
+

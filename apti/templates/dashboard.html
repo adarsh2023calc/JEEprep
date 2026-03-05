@@ -66,7 +66,7 @@
             </div>
 
             <!-- Stats Cards -->
-            <div class="cards">
+            <div class="cards" id="card">
                 <div class="card blue">
                     <h3>Aptitude Overall Accuracy</h3>
                     <p id="aptitude-score">--</p>
@@ -105,14 +105,13 @@
         });
 
         if (listID === "dashboard") {
+            document.getElementById("card").innerHTML="";
             LoadPastAssessments();
         }
 
         if (listID=="analytics"){
-            document.getElementById("dashboard")="";
-            document.getElementById("content")="";
-
-            LoadAnalytics()
+            document.getElementById("card").innerHTML="";
+            LoadAnalytics();
         }
     }
 
@@ -144,8 +143,23 @@
             else{
                 improvement_performance[purpose]= data[purpose];
             }
-        
+
         }
+           
+            for (const [category, performance] of Object.entries({ "Top Performance": top_performance, "Average Performance": average_performance, "Needs Improvement": improvement_performance })) {
+                const section = document.createElement("section");
+                section.innerHTML = `<h3>${category}</h3>`;
+                
+                for (const [subject, score] of Object.entries(performance)) {
+                    const div = document.createElement("div");
+                    div.textContent = `${subject}: ${score}%`;
+                    section.appendChild(div);
+                }
+                
+                document.getElementById("card").appendChild(section);
+            }
+        
+        
     }
 
     async function LoadPastAssessments() {

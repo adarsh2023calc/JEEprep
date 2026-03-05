@@ -50,7 +50,7 @@ urlpatterns = [
     path('api/save_score/',save_score_details),
     path('api/get_scores/',get_score),
     path('api/get_details/',fetch_past_assessments),
-    path("/api/get_subject_performance",fetch_purpose_pipeline)
+    path("api/get_subject_performance",fetch_purpose_pipeline)
     
 ]
 
