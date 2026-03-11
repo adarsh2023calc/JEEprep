@@ -27,6 +27,8 @@
             return cookieValue;
         }
         const csrftoken = getCookie("csrftoken");
+
+
     </script>
 </head>
 
@@ -66,6 +68,19 @@
             </div>
 
             <!-- Stats Cards -->
+
+            <div class ="stats" id="stats" style="display:none">
+               <h3>Top Performance</h3>
+                <div id="top-performance" class="card-container"></div>
+
+                <h3>Average Performance</h3>
+                <div id="average-performance" class="card-container"></div>
+
+                <h3>Needs Improvement</h3>
+                <div id="improvement-performance" class="card-container"></div>
+
+            </div>
+
             <div class="cards" id="card">
                 <div class="card blue">
                     <h3>Aptitude Overall Accuracy</h3>
@@ -90,9 +105,6 @@
             </section>
 
         </main>
-
-        <main id="analytics">
-        </main>
     </div>
 </div>
 
@@ -105,12 +117,13 @@
         });
 
         if (listID === "dashboard") {
-           
+            document.getElementById("stats").style.display="none";
+            document.getElementById("card").style.display="flex";
             LoadPastAssessments();
         }
 
         if (listID=="analytics"){
-           
+            document.getElementById("card").style.display="none";
             LoadAnalytics();
         }
     }
@@ -132,12 +145,15 @@
         let top_performance={};
         let average_performance={};
         let improvement_performance ={};
-        for(purpose in Object.keys(data)){
+
+        
+        for(const purpose of Object.keys(data)){
+            console.log(data[purpose]);
             if  (data[purpose] >= 75){
                 top_performance[purpose]= data[purpose];
             }
 
-            else if(50 <= data[purpose] < 75){
+            else if(50 <= data[purpose] && data[purpose] < 75){
                 average_performance[purpose]=data[purpose];
             }
             else{
@@ -145,20 +161,11 @@
             }
 
         }
-           
-            for (const [category, performance] of Object.entries({ "Top Performance": top_performance, "Average Performance": average_performance, "Needs Improvement": improvement_performance })) {
-                const section = document.createElement("section");
-                section.innerHTML = `<h3>${category}</h3>`;
-                
-                for (const [subject, score] of Object.entries(performance)) {
-                    const div = document.createElement("div");
-                    div.textContent = `${subject}: ${score}%`;
-                    section.appendChild(div);
-                }
-                
-                document.getElementById("card").appendChild(section);
-            }
-        
+            document.getElementById("stats").style.display="block";
+            createCards(top_performance, "top-performance", "green");
+            createCards(average_performance, "average-performance", "yellow");
+            createCards(improvement_performance, "improvement-performance", "red");
+                        
         
     }
 
@@ -255,6 +262,26 @@ function displayTables(data, section) {
     }
 }
 
+function createCards(data, containerId, colorClass){
+
+    const container = document.getElementById(containerId);
+    container.innerHTML="";
+
+    for(const topic in data){
+
+        const cleanName = topic.replace(/[\[\]'"]/g,"");
+
+        const card = document.createElement("div");
+        card.className = `card ${colorClass}`;
+
+        card.innerHTML = `
+            <div>${cleanName}</div>
+            <div>${data[topic].toFixed(1)}%</div>
+        `;
+
+        container.appendChild(card);
+    }
+}
 
 function Navigate(){
     window.location.replace("/index.html");

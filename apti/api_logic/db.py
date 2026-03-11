@@ -1,5 +1,7 @@
 from pydoc_data import topics
 
+
+
 from pymongo import MongoClient
 from datetime import datetime
 from django.conf import settings
@@ -57,7 +59,7 @@ def save_to_mongodb(user_id, assessment_id, data, purpose):
                 "question": key.get("question"),
                 "options": key.get("options"),
                 "difficulty": key.get("difficulty"),
-                "topic": key.get("topic")[0] if key.get("topic") else None,
+                "topic": key.get("topic") if key.get("topic") else None,
                 "answer": key.get("answer"),
                 "purpose": purpose,
                 "created_at": datetime.utcnow()
@@ -270,16 +272,28 @@ def fetch_purpose_pipeline_from_mongodb(user_id):
     
         
     json_data = {}
-
-    topics=["Reading_comprehension","Sentence_correction","grammar","vocabulary", "error_spotting","os","dbms","networks","DS","algorithms","cyber","oops" ,"compiler","dsa","ai","ml","dl","dsml","architecture","cloud","devops","software", "web","linux","sql","aptitude","systemdesign","arithemetic","number_system","algebra","probability","data_interpretation"]
+    topics=["Reading_comprehension","Sentence_correction","grammar","vocabulary", 
+            "error_spotting","os","dbms","networks","DS","algorithms","cyber","oops" ,
+            "compiler","dsa","ai","ml","dl","dsml","architecture","cloud","devops",
+            "software", "web","linux","sql","aptitude","systemdesign","arithemetic",
+            "number_system","algebra","probability","data_interpretation"]
+    
     for doc in cursor:
-        json_data[doc["_id"]] = doc["accuracy"]
-        print(doc["_id"], doc["accuracy"])
+        if type(doc["_id"]) == list:
+            for topic in doc["_id"]:
+                json_data[topic] = doc["accuracy"]
+        else:   
+            json_data[doc["_id"]] = doc["accuracy"]
+        
 
     # Ensure all topics exist (default 0)
     for topic in topics:
         if topic not in json_data:
-            json_data[topic] = 0
+            if type(topic)==list:
+                for t in topic:
+                    json_data[t] = 0
+            else:
+                json_data[topic] = 0
 
     print(json_data)
     return json_data
