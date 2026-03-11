@@ -1,3 +1,17 @@
+// This is the dashboard template for the user after they log in. 
+It includes a sidebar for navigation, 
+a top bar with a button to navigate to quizzes and assessments,
+For any selected section, it dynamically loads the relevant content using 
+JavaScript and fetches data from the backend APIs to display 
+user performance metrics and recent activity.
+
+// You can customize the styling and layout further by modifying 
+the CSS and HTML structure as needed.
+
+// For any clarifications or additional features you'd like to add, feel free to ask
+My contact information is available in the README file.
+
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -109,6 +123,9 @@
 </div>
 
 <script>
+
+    // default active class is set to dashboard, 
+    // so when the page loads, the dashboard content will be shown by default.
     ChangeActiveClass('dashboard');
 
     function ChangeActiveClass(listID) {
@@ -117,19 +134,29 @@
         });
 
         if (listID === "dashboard") {
+
+            // When we click on the dashboard, we want to 
+            // show the stats cards and hide the past assessments table.
             document.getElementById("stats").style.display="none";
             document.getElementById("card").style.display="flex";
             LoadPastAssessments();
         }
 
         if (listID=="analytics"){
+            // When we click on the analytics, 
+            // we want to show the subject-wise performance cards 
+            // and hide the past assessments table.
             document.getElementById("card").style.display="none";
+            document.getElementById("stats").style.display="block";
             LoadAnalytics();
         }
     }
 
     async function LoadAnalytics(params) {
 
+        // API to gather subject-wise performance data for the logged-in user. 
+        // The response is expected to be a JSON object where keys are 
+        // subjects/topics and values are the corresponding performance percentages.
         const response = await fetch("/api/get_subject_performance",
         {
             method: "POST",
@@ -161,10 +188,12 @@
             }
 
         }
-            document.getElementById("stats").style.display="block";
-            createCards(top_performance, "top-performance", "green");
-            createCards(average_performance, "average-performance", "yellow");
-            createCards(improvement_performance, "improvement-performance", "red");
+            let topics= new Set();
+
+            
+            createCards(top_performance, "top-performance", "green",topics);
+            createCards(average_performance, "average-performance", "yellow",topics);
+            createCards(improvement_performance, "improvement-performance", "red",topics);
                         
         
     }
@@ -259,26 +288,37 @@ function displayTables(data, section) {
         `;
 
         section.appendChild(table);
+
     }
 }
 
-function createCards(data, containerId, colorClass){
+function createCards(data, containerId, colorClass,set){
 
     const container = document.getElementById(containerId);
     container.innerHTML="";
 
     for(const topic in data){
 
+        // Some topics are coming in the format of "['topic_name']" 
+        // due to how they are stored in the database. This regex removes the brackets and 
+        // quotes to get a clean topic name for display.
         const cleanName = topic.replace(/[\[\]'"]/g,"");
 
+        // Do not create duplicate cards for the same topic across different categories
+        if(set.has(cleanName)){
+            continue;
+        }
+        // Add the topic to the set to track it
+        set.add(cleanName);
         const card = document.createElement("div");
         card.className = `card ${colorClass}`;
 
+        //Create card content
         card.innerHTML = `
             <div>${cleanName}</div>
             <div>${data[topic].toFixed(1)}%</div>
         `;
-
+        // Container is the div where the cards will be appended
         container.appendChild(card);
     }
 }
@@ -286,9 +326,6 @@ function createCards(data, containerId, colorClass){
 function Navigate(){
     window.location.replace("/index.html");
 }
-
-
-
 </script>
 
 </body>
