@@ -18,22 +18,26 @@ body {
 }
 
 .card{
-    padding:12px 18px;
+    padding:12px 12px;
     border-radius:8px;
     color:white;
     font-weight:bold;
+    font-size: 12px;
 }
 
 .green{
     background:#2ecc71;
+    color:red
 }
 
 .yellow{
     background:#f1c40f;
+    color:black
 }
 
 .red{
     background:#e74c3c;
+    color:white;
 }
 
 /* NAVBAR */
