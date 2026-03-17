@@ -11,11 +11,14 @@ def generate_questions(topics, number, difficulty):
     
     prompt = f"""
     Generate {number} multiple choice questions (MCQs) from the following topics:
-    Topics: {', '.join(selected_topics)}
+    Topic: {', '.join(selected_topics)}
     Difficulty: {difficulty}
 
     Here the questions should be of standard asked in placement tests like TCS NQT, GATE,
-    JEE MAINS, JEE Advanced, Infosys.
+    JEE MAINS, JEE Advanced
+ 
+    Also the topic field should have one of the selected topics for each question
+      If not sure, assign the most relevant topic.
 
     Verify that these questions are not duplicates of GATE/JEE/TCS NQT archives.
     

@@ -11,7 +11,7 @@ body {
 }
 
 .card-container{
-    display:flex;
+    display:inline-block;
     gap:10px;
     flex-wrap:wrap;
     margin: auto;
@@ -27,13 +27,12 @@ body {
 
 .green{
     background:#2ecc71;
-    color:red;
+   
 }
 
 .yellow{
     background:#f1c40f;
-    color:black;
-}
+}   
 
 .red{
     background:#e74c3c;
