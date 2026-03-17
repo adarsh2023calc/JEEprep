@@ -139,7 +139,7 @@ def save_score_to_mongodb(user_id,purpose,assessment_id:str,correct_questions,in
 def fetch_score_from_mongodb(user_id):
     json_data ={}
     
-    for purpose in ["software_quiz", "aptitude", "verbals",'software']:
+    for purpose in ["software_quiz", "aptitude", "verbals"]:
 
         cursor = score_collection.aggregate([
             {
