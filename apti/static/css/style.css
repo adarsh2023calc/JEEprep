@@ -20,14 +20,13 @@ body {
 .card{
     padding:12px 12px;
     border-radius:8px;
-    color:white;
-    font-weight:bold;
     font-size: 12px;
 }
 
+/* why is red not showing up? */
 .green{
-    background:#2ecc71;
-   
+    background:#2ecc71; 
+    
 }
 
 .yellow{
@@ -36,7 +35,6 @@ body {
 
 .red{
     background:#e74c3c;
-    color:white;
 }
 
 /* NAVBAR */
