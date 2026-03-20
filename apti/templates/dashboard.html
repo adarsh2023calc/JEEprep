@@ -241,9 +241,9 @@ async function updateScoreCards() {
     let verbals_score =score['verbals'];
     let software_score = score['software_quiz'];
 
-    document.getElementById("aptitude-score").innerText=aptitude_score;
-    document.getElementById("verbals-score").innerText=verbals_score;
-    document.getElementById("software-score").innerText=software_score;
+    document.getElementById("aptitude-score").innerText=Math.round(aptitude_score, 2);
+    document.getElementById("verbals-score").innerText=Math.round(verbals_score, 2);
+    document.getElementById("software-score").innerText=Math.round(software_score, 2);
 }
 
 function displayTables(data, section) {

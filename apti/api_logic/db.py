@@ -1,7 +1,4 @@
 from pydoc_data import topics
-
-
-
 from pymongo import MongoClient
 from datetime import datetime
 from django.conf import settings
@@ -131,7 +128,12 @@ def save_score_to_mongodb(user_id,purpose,assessment_id:str,correct_questions,in
     "purpose":purpose
     }
 
-    score_collection.insert_one(doc)
+    try:
+        score_collection.insert_one(doc)
+    except Exception as e:
+        print("MongoDB Insert Error:", str(e))
+        return False
+    
 
     print("Inserted successfully")
 
@@ -292,8 +294,7 @@ def fetch_purpose_pipeline_from_mongodb(user_id):
                     json_data[t] = 0
             else:
                 json_data[topic] = 0
-
-    print(json_data)
+    
     return json_data
 
 

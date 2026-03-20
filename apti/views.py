@@ -241,6 +241,7 @@ def save_score_details(request):
         save_score_to_mongodb(user_id=user_id,assessment_id=assessment_id,\
                             correct_questions=correct,incorrect_questions=incorrect,\
                                 unattempted_questions=unattempted,purpose=purpose)
+        
         return Response({"status": "ok"}, status=status.HTTP_200_OK)
     except Exception as e:
         print("MongoDB Error:", str(e))
