@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from rest_framework import status
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 from .models import QuizSettings
 from .serializers import QuizSettingsSerializer
@@ -300,6 +301,40 @@ def fetch_purpose_pipeline(request):
             {"error": "Internal server error"},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+
+
+@api_view(["GET","POST"])
+def google_login(request):
+
+    if (request.method=='GET'):
+            print("Initiating Google OAuth flow")
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'secrets.json',
+                scopes=['openid', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
+            )
+            flow.redirect_uri = 'https://jeeprep-myl7.onrender.com/dashboard.html'
+            print(flow.authorization_url())
+            return redirect(flow.authorization_url()[0])
+
+    elif (request.method=='POST'):
+        code = request.data.get("code")
+        flow = InstalledAppFlow.from_client_secrets_file(
+            'client_secret.json',
+            scopes=['openid', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
+        )
+        flow.redirect_uri = 'https://jeeprep-myl7.onrender.com/'
+        flow.fetch_token(code=code)
+        credentials = flow.credentials
+        id_info = credentials.id_token
+        email = id_info.get("email")
+        name = id_info.get("name")      
+               
+        user, created = User.objects.get_or_create(username=email, defaults={'email': email, 'first_name': name})
+        login(request, user)
+    
+    
+    return Response({"message": "Google login successful"}, status=status.HTTP_200_OK)
 
 
         

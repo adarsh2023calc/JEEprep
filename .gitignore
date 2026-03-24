@@ -6,3 +6,6 @@ env
 apti/migrations/__pycache__
 apti/api_logic/__pycache__
 .env
+secrets.json
+
+
