@@ -314,7 +314,6 @@ def google_login(request):
                 scopes=['openid', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
             )
             flow.redirect_uri = 'https://jeeprep-myl7.onrender.com/dashboard.html'
-            print(flow.authorization_url())
             return redirect(flow.authorization_url()[0])
 
     elif (request.method=='POST'):
@@ -323,13 +322,12 @@ def google_login(request):
             'client_secret.json',
             scopes=['openid', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
         )
-        flow.redirect_uri = 'https://jeeprep-myl7.onrender.com/'
+        flow.redirect_uri = 'https://jeeprep-myl7.onrender.com/dashboard.html'
         flow.fetch_token(code=code)
         credentials = flow.credentials
         id_info = credentials.id_token
         email = id_info.get("email")
         name = id_info.get("name")      
-               
         user, created = User.objects.get_or_create(username=email, defaults={'email': email, 'first_name': name})
         login(request, user)
     
