@@ -6,8 +6,11 @@ from groq import Groq
 
 client = Groq(api_key=settings.GROQ_API_KEY)
 
-def generate_questions(topics, number, difficulty):
+def generate_questions(topics, number, difficulty, weak_topics=None):
     selected_topics = [t for t, selected in topics.items() if selected]
+    
+    if weak_topics:
+        selected_topics = list(set(selected_topics + weak_topics))
     
     prompt = f"""
     Generate {number} multiple choice questions (MCQs) from the following topics:
@@ -35,6 +38,9 @@ def generate_questions(topics, number, difficulty):
       }}
     ]
     """
+    
+    if weak_topics:
+        prompt += f"\nNote: Since the user is struggling with {', '.join(weak_topics)}, include at least 50% of questions from these weak topics and keep them at a slightly easier level if possible."
     
     completion = client.chat.completions.create(
     model="openai/gpt-oss-120b",

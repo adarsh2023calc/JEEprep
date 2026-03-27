@@ -19,6 +19,7 @@
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         function getCookie(name) {
@@ -85,6 +86,9 @@
 
                 <h3 style="padding:12px">Needs Improvement</h3>
                 <div id="improvement-performance" class="card-container"></div>
+
+                <h3 style="padding:12px">Topic Heatmap</h3>
+                <canvas id="topicHeatmap" width="400" height="200"></canvas>
 
             </div>
 
@@ -187,6 +191,9 @@
             createCards(top_performance, "top-performance", "green",topics);
             createCards(average_performance, "average-performance", "yellow",topics);
             createCards(improvement_performance, "improvement-performance", "red",topics);
+            
+            // Create heatmap
+            createHeatmap(data);
                         
         
     }
@@ -310,10 +317,50 @@ function createCards(data, containerId, colorClass,set){
         card.innerHTML = `
             <div>${cleanName}</div>
             <div>${data[topic].toFixed(1)}%</div>
+            ${colorClass === 'red' ? `<div style="font-size: 12px; color: #666;">Suggestion: Practice more on ${cleanName} with easier questions.</div>` : ''}
         `;
         // Container is the div where the cards will be appended
         container.appendChild(card);
     }
+}
+
+function createHeatmap(data) {
+    const ctx = document.getElementById('topicHeatmap').getContext('2d');
+    const topics = Object.keys(data);
+    const accuracies = Object.values(data);
+
+    const colors = accuracies.map(acc => {
+        if (acc >= 75) return 'rgba(34, 197, 94, 0.8)'; // green
+        if (acc >= 50) return 'rgba(251, 191, 36, 0.8)'; // yellow
+        return 'rgba(239, 68, 68, 0.8)'; // red
+    });
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: topics,
+            datasets: [{
+                label: 'Accuracy (%)',
+                data: accuracies,
+                backgroundColor: colors,
+                borderColor: colors.map(c => c.replace('0.8', '1')),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
 }
 
 function Navigate(){

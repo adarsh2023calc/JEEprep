@@ -46,12 +46,28 @@ class GenerateQuizView(APIView):
         number = int(request.data.get("number", 10))
         difficulty = request.data.get("difficulty", "easy")
         topics = request.data.get("topics", [])
+        user_id = request.data.get("user_id")  # Add user_id
+
         print("Number is",number)
         try:
+            # Adaptive learning: if user_id provided, adjust topics based on weak areas
+            weak_topics = None
+            if user_id:
+                weak_topics = self.get_weak_topics(user_id)
+                if weak_topics:
+                    # Include weak topics in the selected topics
+                    topics = list(set(topics + weak_topics))
+                    # Adjust difficulty if struggling
+                    if difficulty == "easy":
+                        pass  # keep easy
+                    else:
+                        difficulty = "medium"  # lower difficulty for weak topics
+
             questions = generate_questions(
                 topics=topics,
                 number=number,
-                difficulty=difficulty
+                difficulty=difficulty,
+                weak_topics=weak_topics
             )
 
             return Response({"questions": questions}, status=200)
@@ -59,6 +75,13 @@ class GenerateQuizView(APIView):
         except Exception as e:
             print(e)
             return Response({"error": str(e)}, status=500)
+
+    def get_weak_topics(self, user_id):
+        # Fetch topic accuracies and return topics with low accuracy
+        from .api_logic.db import fetch_purpose_pipeline_from_mongodb
+        accuracies = fetch_purpose_pipeline_from_mongodb(user_id)
+        weak_topics = [topic for topic, acc in accuracies.items() if acc < 50]
+        return weak_topics[:5]  # limit to 5 weak topics
     # -----------------------------
 # HTML PAGES — SET CSRF COOKIE HERE
 # -----------------------------

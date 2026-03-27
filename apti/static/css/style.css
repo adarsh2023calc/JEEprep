@@ -23,7 +23,7 @@ body {
     font-size: 12px;
 }
 
-/* why is red not showing up? */
+/* why is green not showing up? */
 .green{
     background:#2ecc71; 
         
@@ -33,8 +33,10 @@ body {
     background:#f1c40f;
 }   
 
+/* why is red not showing up? */
 .red{
     background:#e74c3c;
+
 }
 
 /* NAVBAR */
