@@ -118,3 +118,37 @@ def ai_extract_json(raw_text, client):
 
     extracted = response.choices[0].message.content.strip()
     return json.loads(extracted)
+
+def fetch_sql_quiz_ai(request_data):
+    topic = request_data.get("topic")
+    difficulty = request_data.get("difficulty")
+
+    prompt = f"""
+    Generate a SQL coding question on the topic of {topic} with {difficulty} difficulty. 
+    The question should be suitable for placement tests like TCS NQT, GATE, JEE MAINS, JEE Advanced.
+
+    STRICT OUTPUT:
+    - Output ONLY valid JSON.
+    - Format:
+    {{
+      question: "string",
+      answer: "string",
+      topic: "{topic}",
+      difficulty: "{difficulty}",
+      test_cases: [
+        {{
+          input: "string",
+          expected_output: "string"
+        }}
+      ]
+    }}
+    """
+    response = client.chat.completions.create(
+        model="openai/gpt-oss-120b", 
+        messages=[{"role": "user", "content": prompt}],
+        temperature=1,
+        max_completion_tokens=2048
+    )
+
+    extracted = response.choices[0].message.content.strip()
+    return json.loads(extracted)

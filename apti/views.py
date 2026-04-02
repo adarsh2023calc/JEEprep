@@ -13,7 +13,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 
 from .models import QuizSettings
 from .serializers import QuizSettingsSerializer
-from .api_logic.ai import generate_questions
+from .api_logic.ai import generate_questions,fetch_sql_quiz_ai
 from .api_logic.fetch import fetch_questions
 from .api_logic.db import (
     save_to_mongodb,
@@ -21,6 +21,7 @@ from .api_logic.db import (
     save_score_to_mongodb,
     fetch_score_from_mongodb,
     fetch_purpose_pipeline_from_mongodb,
+    
 )
 
 # -----------------------------
@@ -111,6 +112,12 @@ def score_view(request):
 
 def leetcode_view(request):
     return render(request,"editor.html")
+
+def render_sql_quiz_page(request):
+    return render(request,"sql_quiz.html")
+
+def render_sql_editor_page(request):
+    return render(request,"sql_editor.html")
 
 
 
@@ -358,5 +365,8 @@ def google_login(request):
     return Response({"message": "Google login successful"}, status=status.HTTP_200_OK)
 
 
-        
+@api_view(["POST"])
+def fetch_sql_quiz(request):
+
+    return Response(fetch_sql_quiz_ai(request.data))
 

@@ -21,7 +21,8 @@ from apti.views import main_backend_page,aptitude_quiz,software_quiz,verbals_qui
     assesment_quiz,score_view , leetcode_view,run_code,render_questions_page,\
         fetch_questions_boiler_plate,render_landing_page,render_dashboard,login_view,logout_view,\
        signup_view,save_assesment_details,save_score_details,get_score,\
-       fetch_past_assessments,fetch_purpose_pipeline,google_login
+       fetch_past_assessments,fetch_purpose_pipeline,google_login,fetch_sql_quiz,\
+       render_sql_quiz_page,render_sql_editor_page
        
 from apti.views import (
     GenerateQuizView
@@ -49,8 +50,11 @@ urlpatterns = [
     path('api/get_scores/',get_score),
     path('api/get_details/',fetch_past_assessments),
     path("api/get_subject_performance",fetch_purpose_pipeline),
-    path("google_login",google_login,name="google_login")
-    
+    path("google_login",google_login,name="google_login"),
+    path('admin/', admin.site.urls),
+    path('api/generate_sql_quiz', fetch_sql_quiz),
+    path('sql_quiz.html',render_sql_quiz_page),
+    path('sql_editor.html',render_sql_editor_page)
 ]
 
 

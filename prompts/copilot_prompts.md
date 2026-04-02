@@ -1,10 +1,12 @@
+Design the `sql_quiz` editor page in a markdown prompt for the UI/UX implementation.
 
+Requirements:
+- Layout similar to LeetCode/HackerRank: split-screen editor and problem panel.
+- Left panel: problem statement, instructions, sample input/output, constraints, and scoring.
+- Right panel: SQL code editor with line numbers, syntax highlighting, auto-complete, and theme support.
+- Top toolbar: buttons for `Run`, `Submit`, `Reset`, and `Download`.
+- Bottom result section: query output table, runtime/errors, and test case status.
+- Responsive design that works on desktop and tablet.
 
-Add more unique features
+Goal: generate HTML/CSS/JS design guidance for `apti/templates/sql_quiz.html` that makes the SQL quiz look and feel like a professional coding challenge platform.
 
-Personalized "Weak Area" Analytics
-Move beyond a simple dashboard to "Actionable Insights."
-
-Topic Heatmaps: Use a visual chart to show which topics (e.g., Thermodynamics, Quantitative Aptitude, DBMS) the user consistently fails in.
-
-Adaptive Learning: If the AI detects a user is struggling with "Triggers" in SQL, it should automatically suggest more resources or easier questions on that specific sub-topic.

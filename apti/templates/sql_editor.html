@@ -1,0 +1,102 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Question selector</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function getCookie(name) {
+      let cookieValue = null;
+      const cookies = document.cookie.split(";");
+
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        }
+      }
+      return cookieValue;
+    }
+
+    const csrftoken = getCookie("csrftoken");
+    </script>
+</head>
+<body>
+    <div class="bg-gray-100 p-10"> 
+       
+        <h1 class="text-3xl font-bold text-center mb-4 ">SQL Question Settings</h1>
+         <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow space-y-6">
+        <form id="quizForm" class="space-y-5" onsubmit="GenerateSQLQUIZ(event)">
+            <!-- Number of questions -->
+            <div>
+                <label class="block font-semibold mb-1">Number of Questions</label>
+                <input type="number" id="number" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter number of questions">
+            </div>
+
+            <!-- Time allotted -->
+            <div>
+                <label class="block font-semibold mb-1">Time Allotted (minutes)</label>
+                <input type="number" id="time" min="1" class="w-full border p-2 rounded-lg" placeholder="Enter time">
+            </div>
+
+            <!-- Difficulty -->
+            <div>
+                <label class="block font-semibold mb-1">Difficulty Level</label>
+                <select id="difficulty" class="w-full border p-2 rounded-lg">
+                    <option>Easy</option>
+                    <option>Medium</option>
+                    <option>Hard</option>
+                </select>
+            </div>
+
+            <!-- Negative -->
+            <div class="flex items-center">
+                <input type="checkbox" id="negative" class="mr-2">
+                <label for="negative" class="font-semibold">Enable Negative Marking</label>
+            </div>
+           <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-lg">
+          Start Quiz
+           </button>
+        </form>
+
+    </div>
+
+
+    <script>
+
+        function GenerateSQLQUIZ(event){
+            event.preventDefault();
+            const number = document.getElementById("number").value;
+            const time = document.getElementById("time").value;
+            const difficulty = document.getElementById("difficulty").value;
+            
+            const data = {
+                number: number,
+                time: time,
+                difficulty: difficulty
+            };
+            const response = fetch("/generate_sql_quiz/",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json",
+                    "X-CSRFToken":csrftoken
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json());
+            localStorage.setItem("sql_quiz_settings",JSON.stringify({
+            number: 10,
+            time: 30,
+            difficulty: difficulty
+        }));
+
+        window.location.replace("/sql_quiz.html");
+        }
+
+        
+    </script>
+    
+</body>
+</html>

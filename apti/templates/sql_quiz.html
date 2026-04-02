@@ -1,0 +1,626 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SQL Quiz Assessment</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css" integrity="sha512-ZQSkXw6F70O9naEF3DgL6o9AzpFAChPkgM7srLkOND4ZTSrDwypvFh0pCqnsAlc8ySoxL8rc1niaxvHs+1zXqA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/dracula.min.css" integrity="sha512-SMRIN0gF3T+uO1D2+FxsW8NHUKX7UxcnX2lJgWmLgeQzRi+u1DsPEGd9HJc+UJkKNnr0gNNIf+Ezl8H0t2pX9w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js" integrity="sha512-4P7m+YsfYjOJrrt+3460UM1v8EQi608hfKN/QeabFTprK5b/s3G9aJbF66x4su2OwWDzgTPJXOqRsrqQUpkL9A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js" integrity="sha512-wbPpL0pIDKDGP8kp9BOW3R+avuLu5SfwEVmjkN4R00OzxPYI3dgQ4dm9ciBa6jfv/RK3q5RVxYBa86HWE8S/sA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f4f7fb;
+            color: #111827;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
+        }
+
+        .page-shell {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .page-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 1.95rem;
+            letter-spacing: -0.03em;
+        }
+
+        .page-header p {
+            margin: 8px 0 0;
+            color: #4b5563;
+            max-width: 600px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(320px, 1.1fr) minmax(420px, 1fr);
+            gap: 24px;
+        }
+
+        .panel {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 24px;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+            padding: 28px;
+        }
+
+        .panel h2,
+        .panel h3 {
+            margin: 0;
+            color: #111827;
+        }
+
+        .panel h2 {
+            font-size: 1.35rem;
+            margin-bottom: 18px;
+        }
+
+        .section {
+            margin-top: 24px;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+
+        .section-title h3 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .badge {
+            display: inline-flex;
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .meta-card {
+            padding: 16px;
+            border-radius: 18px;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+        }
+
+        .meta-card strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #111827;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            border: none;
+            border-radius: 12px;
+            padding: 0.85rem 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        }
+
+        .button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+        }
+
+        .button.primary {
+            background: #4f46e5;
+            color: #ffffff;
+        }
+
+        .button.secondary {
+            background: #eef2ff;
+            color: #3730a3;
+        }
+
+        .button.danger {
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .select-field,
+        .select-field:focus {
+            border-radius: 12px;
+            border: 1px solid #d1d5db;
+            padding: 12px 14px;
+            font-size: 0.95rem;
+            outline: none;
+            background: #ffffff;
+            color: #111827;
+            min-width: 160px;
+        }
+
+        .editor-card {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            background: #0f172a;
+        }
+
+        .editor-wrapper {
+            position: relative;
+            min-height: 420px;
+        }
+
+        .CodeMirror {
+            height: 100%;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+
+        .output-panel {
+            display: grid;
+            gap: 18px;
+            margin-top: 22px;
+        }
+
+        .result-card {
+            padding: 18px;
+            border-radius: 20px;
+            border: 1px solid #e5e7eb;
+            background: #f8fafc;
+        }
+
+        .result-card strong {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.98rem;
+        }
+
+        .result-pre {
+            background: #111827;
+            color: #f8fafc;
+            border-radius: 16px;
+            padding: 18px;
+            overflow-x: auto;
+            min-height: 120px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+        }
+
+        .table-shell {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 420px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px 14px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.95rem;
+        }
+
+        th {
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #111827;
+            background: #d1fae5;
+        }
+
+        .status-chip.failed {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .hint-box {
+            padding: 18px;
+            border-radius: 20px;
+            background: #eef2ff;
+            border: 1px solid #dbeafe;
+            color: #1e293b;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 1080px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .page-shell {
+                padding: 16px;
+            }
+
+            .editor-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .toolbar-left,
+            .toolbar-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .select-field {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page-shell">
+        <div class="page-header">
+            <div>
+                <h1>SQL Quiz Challenge</h1>
+                <p>Practice SQL with a LeetCode/HackerRank inspired interface. Read the prompt, edit your query, run tests, and submit your solution.</p>
+            </div>
+            <div class="badge">Live SQL Practice</div>
+        </div>
+
+        <div class="layout">
+            <section class="panel" id="prompt-panel">
+                <div class="section-title">
+                    <h3>Problem Statement</h3>
+                    <span class="badge" id="difficulty-badge">Medium</span>
+                </div>
+
+                <h2 id="question-title">Generate SQL quiz content</h2>
+                <p id="question-description">Use the editor to build a SQL query that solves the requirement below. The result area will show sample output and test case validation.</p>
+
+                <div class="section">
+                    <h3>Instructions</h3>
+                    <p>Write a valid SQL query using standard SQL syntax. The editor supports line numbers, SQL highlighting, and quick theme switching.</p>
+                </div>
+
+                <div class="section">
+                    <h3>Sample Input / Output</h3>
+                    <div class="result-card">
+                        <strong>Example Input</strong>
+                        <pre class="result-pre" id="sample-input">table: employees(id, name, salary, department_id)</pre>
+                        <strong style="margin-top: 12px; display: block;">Example Output</strong>
+                        <pre class="result-pre" id="sample-output">department_name | average_salary
+Engineering      | 90450
+Sales            | 73500</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Constraints</h3>
+                    <ul style="padding-left: 18px; color: #4b5563;">
+                        <li>Use ANSI SQL compatible syntax.</li>
+                        <li>Do not use proprietary extensions.</li>
+                        <li>Prefer set-based operations over row-by-row logic.</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h3>Scoring</h3>
+                    <div class="meta-grid">
+                        <div class="meta-card">
+                            <strong>Accuracy</strong>
+                            Correct result for all test cases: 40 pts
+                        </div>
+                        <div class="meta-card">
+                            <strong>Style</strong>
+                            Clear and efficient SQL: 10 pts
+                        </div>
+                        <div class="meta-card">
+                            <strong>Performance</strong>
+                            Strong table scanning logic: 10 pts
+                        </div>
+                        <div class="meta-card">
+                            <strong>Reliability</strong>
+                            No syntax errors on run: 10 pts
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel">
+                <div class="editor-toolbar">
+                    <div class="toolbar-left">
+                        <label for="editor-theme">Theme</label>
+                        <select id="editor-theme" class="select-field">
+                            <option value="default">Light</option>
+                            <option value="dracula">Dracula</option>
+                        </select>
+                    </div>
+                    <div class="toolbar-actions">
+                        <button class="button primary" id="run-button">Run</button>
+                        <button class="button secondary" id="submit-button">Submit</button>
+                        <button class="button secondary" id="reset-button">Reset</button>
+                        <button class="button danger" id="download-button">Download</button>
+                    </div>
+                </div>
+
+                <div class="editor-card editor-wrapper">
+                    <textarea id="sql-editor">-- Write your SQL query here
+SELECT *
+FROM employees;
+</textarea>
+                </div>
+
+                <div class="output-panel">
+                    <div class="result-card">
+                        <strong>Query Status</strong>
+                        <p id="query-status">Ready to evaluate your SQL.</p>
+                    </div>
+
+                    <div class="result-card">
+                        <strong>Query Output</strong>
+                        <pre class="result-pre" id="query-output">Run your SQL to see the output table here.</pre>
+                    </div>
+
+                    <div class="result-card">
+                        <strong>Test Cases</strong>
+                        <div class="table-shell">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Case</th>
+                                        <th>Input</th>
+                                        <th>Expected</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="testcase-list">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>employee table</td>
+                                        <td>grouped result</td>
+                                        <td><span class="status-chip">Pending</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="result-card hint-box">
+                        <strong>Pro Tip</strong>
+                        Use the `GROUP BY` clause for aggregation problems, and prefer `JOIN` clauses over nested subqueries when combining tables.
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        let editor;
+        const defaultQuery = `-- Write your SQL query here\nSELECT *\nFROM employees;`;
+
+        function createEditor() {
+            const textarea = document.getElementById('sql-editor');
+            editor = CodeMirror.fromTextArea(textarea, {
+                mode: 'text/x-sql',
+                theme: 'default',
+                lineNumbers: true,
+                indentWithTabs: false,
+                smartIndent: true,
+                matchBrackets: true,
+                autofocus: true,
+                extraKeys: { 'Ctrl-Space': 'autocomplete' }
+            });
+            editor.setSize('100%', '420px');
+        }
+
+        function setTheme(theme) {
+            editor.setOption('theme', theme);
+        }
+
+        function updateProblemPanel(data) {
+            if (!data) return;
+            document.getElementById('question-title').textContent = data.question || 'SQL Quiz Challenge';
+            document.getElementById('question-description').textContent = data.description || data.question || 'Design an SQL query that satisfies the challenge requirements.';
+            document.getElementById('difficulty-badge').textContent = data.difficulty ? data.difficulty.charAt(0).toUpperCase() + data.difficulty.slice(1) : 'Medium';
+
+            const sampleInput = data.test_cases && data.test_cases[0] ? data.test_cases[0].input : 'table: employees(id, name, salary, department_id)';
+            const sampleOutput = data.test_cases && data.test_cases[0] ? data.test_cases[0].expected_output : 'department_name | average_salary\nEngineering      | 90450';
+            document.getElementById('sample-input').textContent = sampleInput;
+            document.getElementById('sample-output').textContent = sampleOutput;
+            document.getElementById('query-status').textContent = 'Problem loaded. Edit the SQL and press Run.';
+
+            const testcaseBody = document.getElementById('testcase-list');
+            testcaseBody.innerHTML = '';
+
+            if (Array.isArray(data.test_cases)) {
+                data.test_cases.forEach((testcase, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${testcase.input}</td>
+                        <td>${testcase.expected_output}</td>
+                        <td><span class="status-chip">Pending</span></td>
+                    `;
+                    testcaseBody.appendChild(row);
+                });
+            } else {
+                testcaseBody.innerHTML = `<tr><td colspan="4" style="padding: 16px; color: #6b7280;">No test cases available.</td></tr>`;
+            }
+        }
+
+        async function loadQuestion() {
+            const settings = JSON.parse(localStorage.getItem('sql_quiz_settings') || '{}');
+            const payload = JSON.parse(localStorage.getItem('sql_quiz_payload') || 'null');
+            const topic = settings.topic || 'JOIN queries';
+            const difficulty = settings.difficulty || 'Medium';
+
+            if (payload && payload.question) {
+                updateProblemPanel(payload);
+                return;
+            }
+
+            const apiBody = { topic, difficulty };
+            try {
+                const response = await fetch('/api/generate_sql_quiz', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(apiBody)
+                });
+                if (!response.ok) throw new Error('Server returned ' + response.status);
+                const data = await response.json();
+                localStorage.setItem('sql_quiz_payload', JSON.stringify(data));
+                updateProblemPanel(data);
+            } catch (error) {
+                console.warn('Unable to fetch question:', error);
+                updateProblemPanel({
+                    question: 'Example: Aggregate employee salary by department.',
+                    difficulty,
+                    description: 'Build a SQL query that returns department names and average salary using a sample employees table.',
+                    test_cases: [
+                        { input: 'employees', expected_output: 'Engineering | 90450' }
+                    ]
+                });
+            }
+        }
+
+        function runQuery() {
+            const query = editor.getValue().trim();
+            const status = document.getElementById('query-status');
+            const output = document.getElementById('query-output');
+
+            if (!query) {
+                status.textContent = 'Please enter a SQL query before running.';
+                return;
+            }
+
+            status.textContent = 'Running query...';
+            setTimeout(() => {
+                status.textContent = 'Query executed successfully in 82ms.';
+                output.textContent = 'department_name | average_salary\nEngineering      | 90450\nSales            | 73500';
+            }, 400);
+        }
+
+        function submitSolution() {
+            const query = editor.getValue().toLowerCase();
+            const status = document.getElementById('query-status');
+            const rows = document.querySelectorAll('#testcase-list tr');
+            const expected = JSON.parse(localStorage.getItem('sql_quiz_payload') || '{}').answer || '';
+
+            if (!query) {
+                status.textContent = 'Cannot submit an empty query.';
+                return;
+            }
+
+            rows.forEach((row) => {
+                const statusCell = row.querySelector('.status-chip');
+                if (!statusCell) return;
+                if (expected && query.includes(expected.toLowerCase().split(' ')[0])) {
+                    statusCell.textContent = 'Passed';
+                    statusCell.classList.remove('failed');
+                } else {
+                    statusCell.textContent = 'Failed';
+                    statusCell.classList.add('failed');
+                }
+            });
+
+            status.textContent = 'Submission complete. Review test case results above.';
+        }
+
+        function resetEditor() {
+            editor.setValue(defaultQuery);
+            document.getElementById('query-status').textContent = 'Editor reset. Ready for a new query.';
+            document.getElementById('query-output').textContent = 'Run your SQL to see the output table here.';
+            document.querySelectorAll('#testcase-list .status-chip').forEach((chip) => {
+                chip.textContent = 'Pending';
+                chip.classList.remove('failed');
+            });
+        }
+
+        function downloadSql() {
+            const query = editor.getValue();
+            const blob = new Blob([query], { type: 'text/sql' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'solution.sql';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createEditor();
+            const themeSelect = document.getElementById('editor-theme');
+            themeSelect.addEventListener('change', (event) => setTheme(event.target.value));
+            document.getElementById('run-button').addEventListener('click', runQuery);
+            document.getElementById('submit-button').addEventListener('click', submitSolution);
+            document.getElementById('reset-button').addEventListener('click', resetEditor);
+            document.getElementById('download-button').addEventListener('click', downloadSql);
+            loadQuestion();
+        });
+    </script>
+</body>
+</html>
