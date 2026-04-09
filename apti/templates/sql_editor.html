@@ -57,9 +57,7 @@
                 <input type="checkbox" id="negative" class="mr-2">
                 <label for="negative" class="font-semibold">Enable Negative Marking</label>
             </div>
-           <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-lg">
-          Start Quiz
-           </button>
+           <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-lg">Start Quiz</button>
         </form>
 
     </div>
@@ -67,8 +65,8 @@
 
     <script>
 
-        function GenerateSQLQUIZ(event){
-            event.preventDefault();
+        async function GenerateSQLQUIZ(event){
+           event.preventDefault();
             const number = document.getElementById("number").value;
             const time = document.getElementById("time").value;
             const difficulty = document.getElementById("difficulty").value;
@@ -78,23 +76,22 @@
                 time: time,
                 difficulty: difficulty
             };
-            const response = fetch("/generate_sql_quiz/",{
+            const response = fetch("/api/generate_sql_quiz",{
                 method:"POST",
                 headers:{
                     "Content-Type":"application/json",
                     "X-CSRFToken":csrftoken
                 },
                 body: JSON.stringify(data)
-            }).then(response => response.json());
-            localStorage.setItem("sql_quiz_settings",JSON.stringify({
-            number: 10,
-            time: 30,
-            difficulty: difficulty
-        }));
+            });
+
+            const data1 = await response.json();
+            localStorage.setItem("sql_quiz_settings",JSON.stringify(
+                {data:data1,number:number,time:time,difficulty:difficulty}));
 
         window.location.replace("/sql_quiz.html");
         }
-
+        
         
     </script>
     

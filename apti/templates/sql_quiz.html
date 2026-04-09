@@ -9,8 +9,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css" integrity="sha512-ZQSkXw6F70O9naEF3DgL6o9AzpFAChPkgM7srLkOND4ZTSrDwypvFh0pCqnsAlc8ySoxL8rc1niaxvHs+1zXqA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/dracula.min.css" integrity="sha512-SMRIN0gF3T+uO1D2+FxsW8NHUKX7UxcnX2lJgWmLgeQzRi+u1DsPEGd9HJc+UJkKNnr0gNNIf+Ezl8H0t2pX9w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js" integrity="sha512-4P7m+YsfYjOJrrt+3460UM1v8EQi608hfKN/QeabFTprK5b/s3G9aJbF66x4su2OwWDzgTPJXOqRsrqQUpkL9A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js" integrity="sha512-wbPpL0pIDKDGP8kp9BOW3R+avuLu5SfwEVmjkN4R00OzxPYI3dgQ4dm9ciBa6jfv/RK3q5RVxYBa86HWE8S/sA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <style>
         :root {
@@ -456,12 +454,37 @@ FROM employees;
         </div>
     </main>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js" integrity="sha512-4P7m+YsfYjOJrrt+3460UM1v8EQi608hfKN/QeabFTprK5b/s3G9aJbF66x4su2OwWDzgTPJXOqRsrqQUpkL9A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/sql/sql.min.js" integrity="sha512-wbPpL0pIDKDGP8kp9BOW3R+avuLu5SfwEVmjkN4R00OzxPYI3dgQ4dm9ciBa6jfv/RK3q5RVxYBa86HWE8S/sA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
         let editor;
         const defaultQuery = `-- Write your SQL query here\nSELECT *\nFROM employees;`;
 
+        window.onreload = function() {
+            loadQuestion();
+        };
         function createEditor() {
             const textarea = document.getElementById('sql-editor');
+            if (!window.CodeMirror) {
+                console.warn('CodeMirror is not loaded. Falling back to the native textarea editor.');
+                textarea.style.width = '100%';
+                textarea.style.minHeight = '420px';
+                textarea.style.fontFamily = 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace';
+                textarea.style.background = '#0f172a';
+                textarea.style.color = '#e2e8f0';
+                textarea.style.border = '1px solid #d1d5db';
+                textarea.style.borderRadius = '12px';
+                textarea.style.padding = '16px';
+                textarea.style.lineHeight = '1.6';
+                editor = {
+                    getValue: () => textarea.value,
+                    setValue: (value) => { textarea.value = value; },
+                    setOption: () => {},
+                    setSize: () => {},
+                };
+                return;
+            }
             editor = CodeMirror.fromTextArea(textarea, {
                 mode: 'text/x-sql',
                 theme: 'default',
@@ -511,40 +534,10 @@ FROM employees;
         }
 
         async function loadQuestion() {
-            const settings = JSON.parse(localStorage.getItem('sql_quiz_settings') || '{}');
-            const payload = JSON.parse(localStorage.getItem('sql_quiz_payload') || 'null');
-            const topic = settings.topic || 'JOIN queries';
-            const difficulty = settings.difficulty || 'Medium';
 
-            if (payload && payload.question) {
-                updateProblemPanel(payload);
-                return;
-            }
+            const data = JSON.parse(localStorage.getItem("sql_quiz_settings") || "{}");
+            updateProblemPanel(data);
 
-            const apiBody = { topic, difficulty };
-            try {
-                const response = await fetch('/api/generate_sql_quiz', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(apiBody)
-                });
-                if (!response.ok) throw new Error('Server returned ' + response.status);
-                const data = await response.json();
-                localStorage.setItem('sql_quiz_payload', JSON.stringify(data));
-                updateProblemPanel(data);
-            } catch (error) {
-                console.warn('Unable to fetch question:', error);
-                updateProblemPanel({
-                    question: 'Example: Aggregate employee salary by department.',
-                    difficulty,
-                    description: 'Build a SQL query that returns department names and average salary using a sample employees table.',
-                    test_cases: [
-                        { input: 'employees', expected_output: 'Engineering | 90450' }
-                    ]
-                });
-            }
         }
 
         function runQuery() {
