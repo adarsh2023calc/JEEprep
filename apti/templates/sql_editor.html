@@ -85,11 +85,12 @@
                 body: JSON.stringify(data)
             });
 
-            const data1 = await response.json();
+                const data1 = await response.then(res=>res.json());
+                
             localStorage.setItem("sql_quiz_settings",JSON.stringify(
                 {data:data1,number:number,time:time,difficulty:difficulty}));
-
-        window.location.replace("/sql_quiz.html");
+        
+            window.location.replace("/sql_quiz.html");
         }
         
         

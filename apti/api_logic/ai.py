@@ -125,8 +125,7 @@ def fetch_sql_quiz_ai(request_data):
 
     prompt = f"""
     Generate a SQL coding question on the topic of {topic} with {difficulty} difficulty. 
-    The question should be suitable for placement tests like TCS NQT, GATE, JEE MAINS, JEE Advanced.
-
+    The question should be suitable for placement tests like HackerRank, LeetCode, HackerEarth.
     STRICT OUTPUT:
     - Output ONLY valid JSON.
     - Format:

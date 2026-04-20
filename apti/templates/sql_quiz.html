@@ -502,14 +502,15 @@ FROM employees;
             editor.setOption('theme', theme);
         }
 
-        function updateProblemPanel(data) {
-            if (!data) return;
-            document.getElementById('question-title').textContent = data.question || 'SQL Quiz Challenge';
-            document.getElementById('question-description').textContent = data.description || data.question || 'Design an SQL query that satisfies the challenge requirements.';
-            document.getElementById('difficulty-badge').textContent = data.difficulty ? data.difficulty.charAt(0).toUpperCase() + data.difficulty.slice(1) : 'Medium';
-
-            const sampleInput = data.test_cases && data.test_cases[0] ? data.test_cases[0].input : 'table: employees(id, name, salary, department_id)';
-            const sampleOutput = data.test_cases && data.test_cases[0] ? data.test_cases[0].expected_output : 'department_name | average_salary\nEngineering      | 90450';
+        function updateProblemPanel(response) {
+            
+            if (!response) return;
+            console.log('Updating problem panel with response:', response.data);
+            document.getElementById('question-title').textContent = response.data.question || 'SQL Quiz Challenge';
+            document.getElementById('question-description').textContent = response.data.description || response.data.question || 'Design an SQL query that satisfies the challenge requirements.';
+            document.getElementById('difficulty-badge').textContent = response.data.difficulty ? response.data.difficulty.charAt(0).toUpperCase() + response.data.difficulty.slice(1) : 'Medium';
+            const sampleInput = response.data.test_cases && response.data.test_cases[0] ? response.data.test_cases[0].input : 'table: employees(id, name, salary, department_id)';
+            const sampleOutput = response.data.test_cases && response.data.test_cases[0] ? response.data.test_cases[0].expected_output : 'department_name | average_salary\nEngineering      | 90450';
             document.getElementById('sample-input').textContent = sampleInput;
             document.getElementById('sample-output').textContent = sampleOutput;
             document.getElementById('query-status').textContent = 'Problem loaded. Edit the SQL and press Run.';
@@ -536,6 +537,7 @@ FROM employees;
         async function loadQuestion() {
 
             const data = JSON.parse(localStorage.getItem("sql_quiz_settings") || "{}");
+            
             updateProblemPanel(data);
 
         }
