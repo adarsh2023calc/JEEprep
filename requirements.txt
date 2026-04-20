@@ -5,3 +5,4 @@ pymongo
 load-dotenv
 djangorestframework
 whitenoise
+django-allauth==0.61.1
