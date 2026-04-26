@@ -10,6 +10,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css" integrity="sha512-ZQSkXw6F70O9naEF3DgL6o9AzpFAChPkgM7srLkOND4ZTSrDwypvFh0pCqnsAlc8ySoxL8rc1niaxvHs+1zXqA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/dracula.min.css" integrity="sha512-SMRIN0gF3T+uO1D2+FxsW8NHUKX7UxcnX2lJgWmLgeQzRi+u1DsPEGd9HJc+UJkKNnr0gNNIf+Ezl8H0t2pX9w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function getCookie(name) {
+        let cookieValue = null;
+        const cookies = document.cookie.split(";");
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + "=")) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            }
+        }
+        return cookieValue;
+        }
+        const csrftoken = getCookie("csrftoken");
+    </script>
     <style>
         :root {
             color-scheme: light;
@@ -542,6 +557,20 @@ FROM employees;
 
         }
 
+
+        function RunSQL(query){
+            
+            return fetch('/api/run_sql/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "X-CSRFToken":csrftoken
+                },
+                body: JSON.stringify({ query })
+            });
+
+        }
+
         function runQuery() {
             const query = editor.getValue().trim();
             const status = document.getElementById('query-status');
@@ -552,8 +581,22 @@ FROM employees;
                 return;
             }
 
+            //run sql query against backend and update status/output based on response
+
             status.textContent = 'Running query...';
-            setTimeout(() => {
+            setTimeout(()=> {
+                RunSQL(query).then(response => response.json()).then(data => {
+                    if (data.error) {
+                        status.textContent = `Error: ${data.error}`;
+                        output.textContent = '';
+                    } else {
+                        status.textContent = `Query executed successfully in ${data.execution_time}ms.`;
+                        output.textContent = data.result || 'No output returned.';
+                    }
+                }).catch(err => {
+                    status.textContent = `Execution failed: ${err.message}`;
+                    output.textContent = '';
+                });
                 status.textContent = 'Query executed successfully in 82ms.';
                 output.textContent = 'department_name | average_salary\nEngineering      | 90450\nSales            | 73500';
             }, 400);

@@ -1,5 +1,4 @@
 #!/bin/bash
-
 echo "Killing all Django runserver processes..."
 
 # Find and kill processes running "manage.py runserver"
@@ -12,3 +11,4 @@ else
     kill -9 $pids
     echo "All Django processes killed."
 fi
+

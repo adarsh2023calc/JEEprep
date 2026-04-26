@@ -222,6 +222,9 @@ def signup_view(request):
 
 
 
+
+
+
 @api_view(["POST"])
 def save_assesment_details(request):
     
@@ -370,3 +373,14 @@ def fetch_sql_quiz(request):
 
     return Response(fetch_sql_quiz_ai(request.data))
 
+
+@api_view(["POST"])
+def run_code(request):
+    query = request.data
+
+    print("Received SQL query:", query)
+    mock_response = {
+        "status": "success",
+        "execution_time": "82ms",
+        "output": "department_name | average_salary\nEngineering      | 90450\nSales            | 73500"
+    }
