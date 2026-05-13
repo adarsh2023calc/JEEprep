@@ -51,7 +51,7 @@ def generate_questions(topics, number, difficulty, weak_topics=None):
       }
     ],
     temperature=1,
-    max_completion_tokens=8192,
+    max_completion_tokens=7000,
     top_p=1,
     stream=True,
     stop=None
