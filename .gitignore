@@ -1,5 +1,5 @@
-
-
+venv
+.venv
 apti/__pycache__
 jeeprep/__pycache__
 env
