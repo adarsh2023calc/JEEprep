@@ -17,12 +17,12 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from apti.views import main_backend_page,aptitude_quiz,software_quiz,verbals_quiz,\
-    assesment_quiz,score_view , leetcode_view,run_code,render_questions_page,\
-        fetch_questions_boiler_plate,render_landing_page,render_dashboard,login_view,logout_view,\
-       signup_view,save_assesment_details,save_score_details,get_score,\
-       fetch_past_assessments,fetch_purpose_pipeline,google_login,fetch_sql_quiz,\
-       render_sql_quiz_page,render_sql_editor_page,run_code
+from apti.views import main_backend_page, aptitude_quiz, software_quiz, verbals_quiz, \
+    assesment_quiz, score_view, leetcode_view, run_code, run_sql, render_questions_page, \
+    fetch_questions_boiler_plate, render_landing_page, render_dashboard, login_view, logout_view, \
+    signup_view, save_assesment_details, save_score_details, get_score, \
+    fetch_past_assessments, fetch_purpose_pipeline, google_login, fetch_sql_quiz, \
+    render_sql_quiz_page, render_sql_editor_page
        
 from apti.views import (
     GenerateQuizView
@@ -52,9 +52,10 @@ urlpatterns = [
     path("google_login",google_login,name="google_login"),
     path('admin/', admin.site.urls),
     path('api/generate_sql_quiz', fetch_sql_quiz),
-    path('sql_quiz.html',render_sql_quiz_page),
-    path('sql_editor.html',render_sql_editor_page),
-    path('api/run_sql/', run_code)
+    path('sql_quiz.html', render_sql_quiz_page),
+    path('sql_editor.html', render_sql_editor_page),
+    path('api/run/', run_code),
+    path('api/run_sql/', run_sql, name='run_sql'),
 ]
 
 

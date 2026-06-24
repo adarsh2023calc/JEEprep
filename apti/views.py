@@ -375,7 +375,7 @@ def fetch_sql_quiz(request):
 
 
 @api_view(["POST"])
-def run_code(request):
+def run_sql(request):
     query = request.data
 
     print("Received SQL query:", query)
@@ -384,3 +384,5 @@ def run_code(request):
         "execution_time": "82ms",
         "output": "department_name | average_salary\nEngineering      | 90450\nSales            | 73500"
     }
+
+    return Response(mock_response)

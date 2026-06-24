@@ -130,6 +130,7 @@ def save_score_to_mongodb(user_id,purpose,assessment_id:str,correct_questions,in
 
     try:
         score_collection.insert_one(doc)
+        return True
     except Exception as e:
         print("MongoDB Insert Error:", str(e))
         return False
