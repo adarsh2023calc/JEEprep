@@ -10,12 +10,14 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      tier: jeeprep-application
+      tier: jeeprep
   template:
     metadata:
       labels:
-        tier: frontend
+        tier: jeeprep
     spec:
       containers:
-      - name: jeeprep:latest
+      - name: jeeprep
         image: adarshs2023/jeeprep:latest
+        ports:
+        - containerPort: 8080
