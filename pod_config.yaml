@@ -1,0 +1,14 @@
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jeeprep-pod
+spec:
+  containers:
+    - name: jeeprep-container
+      image: jeeprep:latest
+      ports:
+        - containerPort: 8000
+      
+
+    

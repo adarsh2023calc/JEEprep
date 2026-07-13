@@ -1,0 +1,34 @@
+---
+- name: Deploy jeeprep Locally
+  hosts: all
+  become: yes  # Required to install packages and manage Docker
+  vars:
+    ansible_python_interpreter: .venv/bin/python3  # Use the virtual environment's Python interpreter
+  tasks:
+    - name: Ensure prerequisites are installed
+      ansible.builtin.apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker (if not already installed)
+      ansible.builtin.package:
+        name: docker.io
+        state: present
+
+   
+
+    - name: Pull and run jeeprep Docker container
+      community.docker.docker_container:
+        name: jeeprep_app
+        image: jeeprep # Change 'latest' to your specific tag if needed
+        state: started
+        restart_policy: always
+        ports:
+          - "80:8000" # Maps port 80 of your localhost to port 8000 inside the container

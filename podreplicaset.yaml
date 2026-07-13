@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: jeeprep-app
+  labels:
+    app: guestbook
+    tier: Full-Stack
+spec:
+  
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: jeeprep-application
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: jeeprep:latest
+        image: adarshs2023/jeeprep:latest
