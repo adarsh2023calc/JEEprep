@@ -1,0 +1,21 @@
+kubeapiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jeeprep
+  labels:
+    app: jeeprep
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: jeeprep
+  template:
+    metadata:
+      labels:
+        app: jeeprep
+    spec:
+      containers:
+      - name: jeeprep
+        image: adarshs2023/jeeprep:latest
+        ports:
+        - containerPort: 8080
