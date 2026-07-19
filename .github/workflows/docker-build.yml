@@ -1,6 +1,3 @@
-
-
-
 name: Build image when rebuilt
 
 on:
@@ -10,7 +7,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: alpine:latest
+    container:
+      image: docker:24.0.5
+      options: --privileged 
+      
     permissions:
       contents: read
     env:
