@@ -74,6 +74,17 @@ source env/bin/activate
 # Windows
 env\Scripts\activate
 
+
+# Install all dependencies
+
+pip install -r requirements.txt
+
+
+# Run Django
+
+
+python manage.py migrate
+python manage.py runserver
 ```
 
 
